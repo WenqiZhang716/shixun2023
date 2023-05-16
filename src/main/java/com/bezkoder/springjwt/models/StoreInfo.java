@@ -11,7 +11,7 @@ public class StoreInfo {
     private int id;
 
     private int goodsId;
-    @Column(name = "apply_id",columnDefinition="DEFAULT 0")
+   // @Column(name = "apply_id",columnDefinition="DEFAULT 0")
     private int applyId;
 
     private int areaId;
