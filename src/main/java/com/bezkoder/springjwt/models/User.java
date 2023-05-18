@@ -31,12 +31,22 @@ public class User {
 
 	private int age=0;
 
+	private int belongId; //只针对transporter
+
 	@Size(max = 120)
 	private String defaultAddress;
 	@Size(max = 20)
 	private String realName;
 	//是否实名认证
 	private int isCheck=0;
+
+	public int getBelongId() {
+		return belongId;
+	}
+
+	public void setBelongId(int belongId) {
+		this.belongId = belongId;
+	}
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_role",
