@@ -8,6 +8,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * @author zhangwq
+ */
 @Entity
 @Table(	name = "users",
 		uniqueConstraints = {
@@ -17,23 +20,23 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 	@NotBlank
 	@Size(max = 20) //对应手机号
 	private String username;
-
-
 	@NotBlank
 	@Size(max = 120)
 	private String password;
 	@Size(max = 20)
+	private String nickName;
+
+	private int age=0;
+
+	@Size(max = 120)
+	private String defaultAddress;
+	@Size(max = 20)
 	private String realName;
-	@Size(max = 20)
-	private String workId;
-	@Size(max = 20)
-	private String depart;
-	@Size(max=20)
-	private String phone;
+	//是否实名认证
+	private int isCheck=0;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_role",
@@ -47,15 +50,29 @@ public class User {
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
+		this.age=0;
+		this.nickName=username;
+		this.isCheck=0;
 	}
 
-	public User(String username, String password,String realName,String workId,String depart,String phone) {
-		this.username = username;
-		this.password = password;
-		this.realName = realName;
-		this.workId = workId;
-		this.depart = depart;
-		this.phone = phone;
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getDefaultAddress() {
+		return defaultAddress;
+	}
+
+	public void setDefaultAddress(String defaultAddress) {
+		this.defaultAddress = defaultAddress;
 	}
 
 	public Long getId() {
@@ -68,44 +85,6 @@ public class User {
 
 	public void setRealName(String realName) {
 		this.realName = realName;
-	}
-
-	public String getWorkId() {
-		return workId;
-	}
-
-	public void setWorkId(String workId) {
-		this.workId = workId;
-	}
-
-	public String getDepart() {
-		return depart;
-	}
-
-	public void setDepart(String depart) {
-		this.depart = depart;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 
 	public String getPassword() {
@@ -122,5 +101,29 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public int getIsCheck() {
+		return isCheck;
+	}
+
+	public void setIsCheck(int isCheck) {
+		this.isCheck = isCheck;
 	}
 }

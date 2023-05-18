@@ -96,8 +96,12 @@ public class AuthController {
 	 */
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		if(!signUpRequest.getUsername().matches("[1][34578][0-9]{9}")){
+
+			return ResponseEntity.ok(new MessageResponse(1,"错误: 请输入正确手机号!"));
+		}
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-			return ResponseEntity.ok(new MessageResponse(1,"错误: 用户名已注册!"));
+			return ResponseEntity.ok(new MessageResponse(1,"错误: 手机号已注册!"));
 		}
 
 		// Create new user's account

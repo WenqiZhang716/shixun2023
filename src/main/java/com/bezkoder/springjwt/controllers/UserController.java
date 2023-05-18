@@ -111,7 +111,7 @@ public class UserController {
 		String username=jwtUtils.getUserNameFromJwtToken(token);
 		Optional<User> user=userRepository.findByUsername(username);
 		if(user.isPresent()){
-			int flag=userRepository.updateUserInfo(username,realName,workId,depart,phone);
+			//int flag=userRepository.updateUserInfo(username,realName,workId,depart,phone);
 			return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
 		}else {
 			return ResponseEntity.ok(new MessageResponse(1, "用户不存在!"));
@@ -135,9 +135,9 @@ public class UserController {
 			map.put("id",user.getId());
 			map.put("userName",user.getUsername());
 			map.put("realName",user.getRealName());
-			map.put("work_id",user.getWorkId());
-			map.put("department",user.getDepart());
-			map.put("phone",user.getPhone());
+//			map.put("work_id",user.getWorkId());
+//			map.put("department",user.getDepart());
+//			map.put("phone",user.getPhone());
 
 			return ResponseEntity.ok(new DataResponse(0,map));
 		}else {
