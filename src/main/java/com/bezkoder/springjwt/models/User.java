@@ -11,8 +11,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(	name = "users",
 		uniqueConstraints = {
-				@UniqueConstraint(columnNames = "username"),
-				@UniqueConstraint(columnNames = "email")
+				@UniqueConstraint(columnNames = "username")
 		})
 public class User {
 	@Id
@@ -20,13 +19,9 @@ public class User {
 	private Long id;
 
 	@NotBlank
-	@Size(max = 20)
+	@Size(max = 20) //对应手机号
 	private String username;
 
-	@NotBlank
-	@Size(max = 50)
-	@Email
-	private String email;
 
 	@NotBlank
 	@Size(max = 120)
@@ -49,15 +44,13 @@ public class User {
 	public User() {
 	}
 
-	public User(String username, String email, String password) {
+	public User(String username, String password) {
 		this.username = username;
-		this.email = email;
 		this.password = password;
 	}
 
-	public User(String username, String email, String password,String realName,String workId,String depart,String phone) {
+	public User(String username, String password,String realName,String workId,String depart,String phone) {
 		this.username = username;
-		this.email = email;
 		this.password = password;
 		this.realName = realName;
 		this.workId = workId;
@@ -105,13 +98,7 @@ public class User {
 		this.username = username;
 	}
 
-	public String getEmail() {
-		return email;
-	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
 
 	public String getPhone() {
 		return phone;

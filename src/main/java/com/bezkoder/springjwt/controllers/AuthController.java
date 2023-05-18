@@ -70,19 +70,19 @@ public class AuthController {
 			List<String> roles = userDetails.getAuthorities().stream()
 					.map(item -> item.getAuthority())
 					.collect(Collectors.toList());
+			//0用户，1运送员
 			int type=loginRequest.getType();
-			if(type==1&& roles.get(0).equals("ROLE_USER")) {
-				return ResponseEntity.ok(new MessageResponse(1,"该用户不是管理员！请使用用户身份登录"));
-			}
-			if(type==0&&roles.get(0).equals("ROLE_ADMIN")){
-				return ResponseEntity.ok(new MessageResponse(1,"该用户是管理员！请使用管理员身份登录"));
+			if(type==0&&roles.get(0).equals("ROLE_USER")||
+					type==1&&roles.get(0).equals("ROLE_TRANSPORT")){
+				return ResponseEntity.ok(new DataResponse(0,new JwtResponse(jwt,
+						userDetails.getId(),
+						userDetails.getUsername(),
+						roles)));
+			}else{
+				return ResponseEntity.ok(new MessageResponse(1,"该用户身份与登陆类型不匹配！"));
 			}
 
-			return ResponseEntity.ok(new DataResponse(0,new JwtResponse(jwt,
-					userDetails.getId(),
-					userDetails.getUsername(),
-					userDetails.getEmail(),
-					roles)));
+
 
 		} catch (BadCredentialsException ex) {
 		//	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -96,30 +96,12 @@ public class AuthController {
 	 */
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        //暂时不启用邮箱，先自动生成一串
-		String str="qjieu6uyafncgsxb4673hydscbcsd3434751945cfdcnn0i7jm5bxm97ijisaw4qqqpk57mxpklazaw";
-		Random random1=new Random();
-		//指定字符串长度，拼接字符并toString
-		StringBuffer sb=new StringBuffer();
-		for (int i = 0; i < 10; i++) {
-			//获取指定长度的字符串中任意一个字符的索引值
-			int number=random1.nextInt(str.length());
-			//根据索引值获取对应的字符
-			char charAt = str.charAt(number);
-			sb.append(charAt);
-		}
-		String email = sb.toString()+"@qq.com";
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity.ok(new MessageResponse(1,"错误: 用户名已注册!"));
 		}
 
-		if (userRepository.existsByEmail(email)) {
-			return ResponseEntity.ok(new MessageResponse(1,"Error: Email is already in use!"));
-		}
-
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(),
-				email,
 				encoder.encode(signUpRequest.getPassword()));
 
 		//Set<String> strRoles = signUpRequest.getRoll();
@@ -128,15 +110,13 @@ public class AuthController {
 		if (oneRole == -1) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
 					.orElseThrow(() -> new RuntimeException("Error: the role roll is not found."));
-			System.out.println("ssss");
 			roles.add(userRole);
 		} else {
 			switch (oneRole) {
 				case 1:
-					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+					Role transRole = roleRepository.findByName(ERole.ROLE_TRANSPORT)
 							.orElseThrow(() -> new RuntimeException("Error: the Role adm is not found."));
-					roles.add(adminRole);
-
+					roles.add(transRole);
 					break;
 				default:
 					Role userRole = roleRepository.findByName(ERole.ROLE_USER)

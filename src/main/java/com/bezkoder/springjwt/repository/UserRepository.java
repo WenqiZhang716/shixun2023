@@ -17,11 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByUsername(String username);
 
-	User findByEmail(String email);
-
 	Boolean existsByUsername(String username);
-
-	Boolean existsByEmail(String email);
 
 	@Modifying
 	@Query(value="update User u set u.password=:newPW where u.username like %:name")
