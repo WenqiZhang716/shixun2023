@@ -70,17 +70,21 @@ public class AuthController {
 			List<String> roles = userDetails.getAuthorities().stream()
 					.map(item -> item.getAuthority())
 					.collect(Collectors.toList());
-			//0用户，1运送员
-			int type=loginRequest.getType();
-			if(type==0&&roles.get(0).equals("ROLE_USER")||
-					type==1&&roles.get(0).equals("ROLE_TRANSPORT")){
-				return ResponseEntity.ok(new DataResponse(0,new JwtResponse(jwt,
+//			//0用户，1运送员
+//			int type=loginRequest.getType();
+//			if(type==0&&roles.get(0).equals("ROLE_USER")||
+//					type==1&&roles.get(0).equals("ROLE_TRANSPORT")){
+//				return ResponseEntity.ok(new DataResponse(0,new JwtResponse(jwt,
+//						userDetails.getId(),
+//						userDetails.getUsername(),
+//						roles)));
+//			}else{
+//				return ResponseEntity.ok(new MessageResponse(1,"该用户身份与登陆类型不匹配！"));
+//			}
+			return ResponseEntity.ok(new DataResponse(0,new JwtResponse(jwt,
 						userDetails.getId(),
 						userDetails.getUsername(),
 						roles)));
-			}else{
-				return ResponseEntity.ok(new MessageResponse(1,"该用户身份与登陆类型不匹配！"));
-			}
 
 
 
@@ -110,7 +114,7 @@ public class AuthController {
 
 		//Set<String> strRoles = signUpRequest.getRoll();
 		Set<Role> roles = new HashSet<>();
-		int oneRole=signUpRequest.getRole();
+		int oneRole=-1;
 		if (oneRole == -1) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
 					.orElseThrow(() -> new RuntimeException("Error: the role roll is not found."));

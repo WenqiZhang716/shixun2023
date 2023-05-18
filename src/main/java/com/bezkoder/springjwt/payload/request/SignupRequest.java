@@ -15,15 +15,6 @@ public class SignupRequest {
 //    private String email;
 
     private Set<String> roll;
-    private int role=-1;
-
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
 
     @NotBlank
     @Size(min = 6, max = 40)
