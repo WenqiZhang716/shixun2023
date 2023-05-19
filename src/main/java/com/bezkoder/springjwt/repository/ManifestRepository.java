@@ -22,4 +22,8 @@ public interface ManifestRepository extends JpaRepository<Manifest,Long> {
     @Query(value="update Manifest m set m.status=3 where m.id=:id")
     int cancelIt(@Param("id")int id);
 
+    @Modifying
+    @Query(value="update Manifest m set m.endAddress=:newAddress where m.id=:id")
+    int changeAddress(@Param("id")int id,@Param("newAddress")String newAddress);
+
 }

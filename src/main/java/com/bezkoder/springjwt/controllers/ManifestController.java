@@ -74,4 +74,22 @@ public class ManifestController {
         }
     }
 
+    @PostMapping("/change-address")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?>changeAddress(@RequestBody Map<String, String> params,
+                                          @RequestHeader("Authorization") String tokenBearer){
+        int id= Integer.parseInt(params.get("id"));
+        String newAddress=params.get("new_address");
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        String username=jwtUtils.getUserNameFromJwtToken(token);
+        int flag=manifestService.changeAddress(id,newAddress);
+        if(flag==1){
+            return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
+        }else if(flag==2){
+            return ResponseEntity.ok(new MessageResponse(1, "货单不存在!"));
+        }else{
+            return ResponseEntity.ok(new MessageResponse(1, "已发货，不能修改地址!"));
+        }
+    }
+
 }

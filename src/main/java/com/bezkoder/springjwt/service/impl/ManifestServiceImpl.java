@@ -57,4 +57,21 @@ public class ManifestServiceImpl implements IManifestService {
         }
 
     }
+
+    @Override
+    public int changeAddress(int manifestId, String newAddress) {
+        Optional<Manifest>mani=manifestRepository.findById(manifestId);
+        if (mani.isPresent()){
+            Manifest manifest=mani.get();
+            if(manifest.getStatus()==0){
+                manifestRepository.changeAddress(manifestId, newAddress);
+                return 1;
+            }else{
+                return 0;
+            }
+        }else{
+            return 2;
+        }
+    }
+
 }

@@ -11,5 +11,6 @@ public interface IManifestService {
                        String beginAddress,String endAddress,int payType,
                        String receiverName,String receiverPhone);
     int cancelOne(int manifestId);
+    int changeAddress(int manifestId,String newAddress);
 }
 
