@@ -23,11 +23,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(value="update User u set u.password=:newPW where u.username like %:name")
 	int updatePassword(@Param("name") String name, @Param("newPW") String newPW);
 
-//	@Modifying
-//	@Query(value="update User u set u.realName=:realName, u.workId=:workId, u.depart=:depart, u.phone=:phone where u.username like %:name")
-//	int updateUserInfo(@Param("name") String name, @Param("realName") String realName,@Param("workId") String workId,
-//	@Param("depart") String depart,@Param("phone") String phone);
+	@Modifying
+	@Query(value="update User u set u.nickName=:nickName, u.age=:age, u.sex=:sex, u.defaultAddress=:defaultAddress where u.username like %:name")
+	int updateUserInfo(@Param("name") String name, @Param("nickName") String nickName,@Param("age") int age,@Param("sex") int sex,
+	@Param("defaultAddress") String address);
 
 
 	int deleteByUsername(String username);
+	@Modifying
+	@Query(value="update User u set u.isCheck=1, u.realName=:realName where u.username like %:name")
+	int checkIt(@Param("name")String name,@Param("realName")String realName);
 }

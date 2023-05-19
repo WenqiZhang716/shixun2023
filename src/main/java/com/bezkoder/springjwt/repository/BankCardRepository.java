@@ -1,6 +1,14 @@
 package com.bezkoder.springjwt.repository;
 
-public interface BankCardRepository {
+import com.bezkoder.springjwt.models.BankCard;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ * @author zhangwq
+ */
+@Repository
+public interface BankCardRepository extends JpaRepository<BankCard,Long> {
 }
 
 

@@ -30,9 +30,7 @@ public class User {
 	private String nickName;
 
 	private int age=0;
-
-	private int belongId; //只针对transporter
-
+	private int sex=0;//0未知 1女 2男
 	@Size(max = 120)
 	private String defaultAddress;
 	@Size(max = 20)
@@ -40,12 +38,12 @@ public class User {
 	//是否实名认证
 	private int isCheck=0;
 
-	public int getBelongId() {
-		return belongId;
+	public int getSex() {
+		return sex;
 	}
 
-	public void setBelongId(int belongId) {
-		this.belongId = belongId;
+	public void setSex(int sex) {
+		this.sex = sex;
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY)

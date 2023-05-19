@@ -2,7 +2,7 @@ package com.bezkoder.springjwt.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
+import java.util.Date;
 /**
  * @author zhangwq
  */
@@ -32,8 +32,12 @@ public class Manifest {
     private String receiverName;
     private int status=0;//0未发货、1进行中、2已完成、3已取消
 
+    private Date createDate;
+
 
     public Manifest() {
+        this.createDate = new Date();
+        this.status = 0;
     }
 
     public String getReceiverName() {

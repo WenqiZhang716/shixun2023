@@ -1,5 +1,6 @@
 package com.bezkoder.springjwt.controllers;
 
+import com.bezkoder.springjwt.models.Role;
 import com.bezkoder.springjwt.models.User;
 import com.bezkoder.springjwt.payload.response.DataResponse;
 import com.bezkoder.springjwt.payload.response.JwtResponse;
@@ -8,6 +9,7 @@ import com.bezkoder.springjwt.payload.response.MessageResponse;
 import com.bezkoder.springjwt.repository.UserRepository;
 import com.bezkoder.springjwt.security.jwt.JwtUtils;
 import com.bezkoder.springjwt.security.services.UserDetailsImpl;
+import com.bezkoder.springjwt.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +36,8 @@ public class UserController {
 
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	IUserService userService;
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -96,7 +100,7 @@ public class UserController {
 	 */
 
 	@PostMapping("/update-info")
-	@PreAuthorize("hasRole('USER') or  hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') ")
 	public ResponseEntity<?>updateInfo(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
 		String token;
 		if(tokenBearer.startsWith("Bearer")){
@@ -104,15 +108,25 @@ public class UserController {
 		}else{
 			token=tokenBearer;
 		}
-		String realName=params.get("realName");
-		String workId=params.get("work_id");
-		String depart=params.get("department");
-		String phone=params.get("phone");
+
+		String nickName=params.get("nickName");
+		int age= Integer.parseInt(params.get("age"));
+		int sex=Integer.parseInt(params.get("sex"));
+		String address=params.get("default_address");
 		String username=jwtUtils.getUserNameFromJwtToken(token);
 		Optional<User> user=userRepository.findByUsername(username);
 		if(user.isPresent()){
-			//int flag=userRepository.updateUserInfo(username,realName,workId,depart,phone);
-			return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
+			if(userService.isUser(username)==0){
+				age=age==-1?user.get().getAge():age;
+				nickName= nickName.equals("") ? user.get().getNickName() : nickName;
+				sex= sex == -1 ? user.get().getSex() : sex;
+				address= address.equals("") ?user.get().getDefaultAddress():address;
+				int flag=userRepository.updateUserInfo(username,nickName,age,sex,address);
+				return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
+			}else{
+				return ResponseEntity.ok(new MessageResponse(1, "用户不存在!"));
+			}
+
 		}else {
 			return ResponseEntity.ok(new MessageResponse(1, "用户不存在!"));
 		}
@@ -124,7 +138,7 @@ public class UserController {
 	 *获取用户信息
 	 */
 	@PostMapping("/get-info")
-	@PreAuthorize("hasRole('USER') or  hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') ")
 	public ResponseEntity<?>getInfo(@RequestHeader("Authorization") String tokenBearer){
 		String token=tokenBearer.substring(7, tokenBearer.length());
 		String username=jwtUtils.getUserNameFromJwtToken(token);
@@ -134,10 +148,12 @@ public class UserController {
 			User user=IsUser.get();
 			map.put("id",user.getId());
 			map.put("userName",user.getUsername());
+			map.put("nickName",user.getNickName());
+			map.put("age",user.getAge());
+			map.put("sex",user.getSex());
+			map.put("default_address",user.getDefaultAddress());
+			map.put("is_check",user.getIsCheck());
 			map.put("realName",user.getRealName());
-//			map.put("work_id",user.getWorkId());
-//			map.put("department",user.getDepart());
-//			map.put("phone",user.getPhone());
 
 			return ResponseEntity.ok(new DataResponse(0,map));
 		}else {
@@ -145,6 +161,25 @@ public class UserController {
 		}
 
 	}
+
+	@PostMapping("/identify")
+	@PreAuthorize("hasRole('USER') ")
+	public ResponseEntity<?>getCheck(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
+		String realName=params.get("realName");
+		String idNum=params.get("id_number");
+		String token=tokenBearer.substring(7, tokenBearer.length());
+		String username=jwtUtils.getUserNameFromJwtToken(token);
+		int flag=userRepository.checkIt(username,realName);
+		if(flag==1){
+			return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
+		}else{
+			return ResponseEntity.ok(new MessageResponse(1, "认证失败!"));
+		}
+
+
+	}
+
+
 
 	@PostMapping("/delete")
 	@PreAuthorize("hasRole('USER') or  hasRole('ADMIN')")
