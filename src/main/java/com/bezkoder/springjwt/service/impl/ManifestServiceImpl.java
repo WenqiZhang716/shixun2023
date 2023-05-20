@@ -7,6 +7,8 @@ import com.bezkoder.springjwt.service.IManifestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -72,6 +74,23 @@ public class ManifestServiceImpl implements IManifestService {
         }else{
             return 2;
         }
+    }
+
+    @Override
+    public List<Manifest> findAllManifestByStatus(int status,Long userId) {
+        //0未发货、1进行中、2已完成、3已取消
+        ArrayList<Manifest>list=new ArrayList<>();
+        if(status==0||status==1||status==2||status==3){
+            list= (ArrayList<Manifest>) manifestRepository.findAllByStatusAndUserId(status,userId);
+
+        }else{
+            list= (ArrayList<Manifest>) manifestRepository.findAllByUserId(userId);
+        }
+//        while(!list.isEmpty()){
+//
+//        }
+
+        return list;
     }
 
 }

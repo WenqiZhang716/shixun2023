@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -25,5 +26,7 @@ public interface ManifestRepository extends JpaRepository<Manifest,Long> {
     @Modifying
     @Query(value="update Manifest m set m.endAddress=:newAddress where m.id=:id")
     int changeAddress(@Param("id")int id,@Param("newAddress")String newAddress);
+    List<Manifest> findAllByStatusAndUserId(int status,Long userId);
+    List<Manifest> findAllByUserId(Long userId);
 
 }

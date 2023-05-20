@@ -1,7 +1,10 @@
 package com.bezkoder.springjwt.service;
 
+import com.bezkoder.springjwt.models.Manifest;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author zhangwq
@@ -12,5 +15,6 @@ public interface IManifestService {
                        String receiverName,String receiverPhone);
     int cancelOne(int manifestId);
     int changeAddress(int manifestId,String newAddress);
+    List<Manifest> findAllManifestByStatus(int status,Long userId);
 }
 

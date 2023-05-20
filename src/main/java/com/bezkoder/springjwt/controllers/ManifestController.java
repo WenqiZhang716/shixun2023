@@ -1,5 +1,6 @@
 package com.bezkoder.springjwt.controllers;
 
+import com.bezkoder.springjwt.models.Manifest;
 import com.bezkoder.springjwt.payload.request.CreateManiRequest;
 import com.bezkoder.springjwt.payload.request.LoginRequest;
 import com.bezkoder.springjwt.payload.response.DataResponse;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -23,9 +25,6 @@ import java.util.Map;
 public class ManifestController {
     @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    ManifestRepository manifestRepository;
 
     @Autowired
     IManifestService manifestService;
@@ -92,4 +91,18 @@ public class ManifestController {
         }
     }
 
+    @PostMapping("/find")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?>findManifest(@RequestBody Map<String, String> params,
+                                          @RequestHeader("Authorization") String tokenBearer){
+        int type=params.get("type").equals("")?-1: Integer.parseInt(params.get("type"));
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdByJwtToken(token);
+        List<Manifest> list=manifestService.findAllManifestByStatus(type,userId);
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("manifest-list",list);
+
+        return ResponseEntity.ok(new DataResponse(0,map));
+
+    }
 }

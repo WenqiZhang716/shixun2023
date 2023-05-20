@@ -62,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/apply/**").permitAll()
 				.antMatchers("/goods/**").permitAll()
 				.antMatchers("/mani/**").permitAll()
+				.antMatchers("/bank-card").permitAll()
 				.anyRequest().authenticated();
 
 //auth不用健全
