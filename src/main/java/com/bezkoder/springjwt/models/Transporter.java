@@ -17,7 +17,7 @@ public class Transporter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer userId;//对应user表
+    private Long userId;//对应user表
     @NotBlank
     @Size(max = 20)
     private String phone;
@@ -29,11 +29,11 @@ public class Transporter {
     private int belongId;//市站id
 
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

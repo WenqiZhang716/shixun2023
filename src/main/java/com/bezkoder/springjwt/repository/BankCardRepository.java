@@ -2,13 +2,25 @@ package com.bezkoder.springjwt.repository;
 
 import com.bezkoder.springjwt.models.BankCard;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author zhangwq
  */
 @Repository
+@Transactional
 public interface BankCardRepository extends JpaRepository<BankCard,Long> {
+    List<BankCard> findAllByUserId(Long userId);
+    @Modifying
+    @Query(value="delete from BankCard b where b.userId=:userId and b.orders=:order")
+    int deleteByOrdersAndUserId(@Param("order")int order,@Param("userId") Long userId);
+
 }
 
 

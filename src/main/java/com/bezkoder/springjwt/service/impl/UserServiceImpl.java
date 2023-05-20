@@ -38,4 +38,21 @@ public class UserServiceImpl implements IUserService {
         }
         return 0;
     }
+
+    @Override
+    public int isChecked(long userId) {
+        Optional<User> optional = userRepository.findById(userId);
+        if (optional.isPresent()) {
+            User user=optional.get();
+            if(user.getIsCheck()==1){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+        return 0;
+
+    }
+
+
 }

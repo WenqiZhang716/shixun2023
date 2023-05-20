@@ -11,5 +11,6 @@ public interface IUserService {
 // 在IUserService里只定义方法，不用实现
 
     int isUser(String username);
+    int isChecked(long userId);
 
 }
