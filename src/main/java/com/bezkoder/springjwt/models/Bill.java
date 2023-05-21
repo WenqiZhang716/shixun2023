@@ -7,7 +7,9 @@ import javax.validation.constraints.Size;
  * @author zhangwq
  */
 @Entity
-@Table(name = "bill")
+@Table(name = "bill",uniqueConstraints = {
+        @UniqueConstraint(columnNames = "manifestId")
+})
 public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +21,19 @@ public class Bill {
     private int bankCardId;
     private int status=0;//0未支付，1已支付，2已取消
     //先付后到是银行卡，先到后付是现金
-    private int payWay=0;//0银行卡，1现金
+    private int payWay=0;//0银行卡，1其他方式
     @NotBlank
     private String payName;//支付人姓名
 
+    private Long userId;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public Bill() {
     }

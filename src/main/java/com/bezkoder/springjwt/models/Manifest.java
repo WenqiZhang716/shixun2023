@@ -33,11 +33,27 @@ public class Manifest {
     private int status=0;//0未发货、1进行中、2已完成、3已取消
 
     private Date createDate;
+    private int isPay=0;  //是否支付, 默认未支付
+    public Date getCreateDate() {
+        return createDate;
+    }
 
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public int getIsPay() {
+        return isPay;
+    }
+
+    public void setIsPay(int isPay) {
+        this.isPay = isPay;
+    }
 
     public Manifest() {
         this.createDate = new Date();
         this.status = 0;
+        this.isPay=0;
     }
 
     public String getReceiverName() {

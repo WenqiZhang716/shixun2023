@@ -35,7 +35,7 @@ public class ManifestServiceImpl implements IManifestService {
             mani.setPayType(payType);
             mani.setReceiverName(receiverName);
             mani.setReceiverPhone(receiverPhone);
-            mani.setAmount(weight*10);
+            mani.setAmount(weight*1.2);
             manifestRepository.save(mani);
             return 1;
         }catch(Exception e){

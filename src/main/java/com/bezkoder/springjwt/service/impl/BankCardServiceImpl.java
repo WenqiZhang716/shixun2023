@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BankCardServiceImpl implements IBankCardService {
@@ -52,4 +53,11 @@ public class BankCardServiceImpl implements IBankCardService {
         }
         return list;
     }
+
+    @Override
+    public int getIdByorder(Long userId, int order) {
+        Optional<BankCard>bank=bankCardRepository.findByUserIdAndOrders(userId,order);
+        return 0;
+    }
+
 }

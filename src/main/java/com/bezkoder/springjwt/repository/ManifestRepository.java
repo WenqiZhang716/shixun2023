@@ -28,5 +28,8 @@ public interface ManifestRepository extends JpaRepository<Manifest,Long> {
     int changeAddress(@Param("id")int id,@Param("newAddress")String newAddress);
     List<Manifest> findAllByStatusAndUserId(int status,Long userId);
     List<Manifest> findAllByUserId(Long userId);
+    @Modifying
+    @Query(value="update Manifest m set m.isPay=1 where m.id=:manifestId")
+    int updateIsPay(@Param("manifestId")int manifestId);
 
 }

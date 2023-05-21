@@ -11,4 +11,6 @@ public interface IBankCardService {
     int addOne(Long userId,String bankCardNum,String bankName);
     int deleteOne(Long userId, int order);
     List<BankCard> getList(Long userId);
+    int getIdByorder(Long userId,int order);
+
 }

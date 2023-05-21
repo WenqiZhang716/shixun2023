@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author zhangwq
@@ -20,7 +21,10 @@ public interface BankCardRepository extends JpaRepository<BankCard,Long> {
     @Modifying
     @Query(value="delete from BankCard b where b.userId=:userId and b.orders=:order")
     int deleteByOrdersAndUserId(@Param("order")int order,@Param("userId") Long userId);
-
+    Optional<BankCard> findByUserIdAndOrders(Long userId,int orders);
+    @Modifying
+    @Query(value="update BankCard b set b.amount=:pay where b.id=:cardId")
+    int updateAmount(@Param("cardId")int cardId,@Param("pay")double pay);
 }
 
 
