@@ -24,6 +24,7 @@ public class Transport {
     private Date arriveTime;
     private int type=0;//0系统自动，1人工
     private int transporterId=0;//系统自动时为0，人工为1
+    private int orders=0;
 
     public Transport() {
     }
@@ -34,6 +35,14 @@ public class Transport {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public int getOrders() {
+        return orders;
+    }
+
+    public void setOrders(int orders) {
+        this.orders = orders;
     }
 
     public int getManifestId() {

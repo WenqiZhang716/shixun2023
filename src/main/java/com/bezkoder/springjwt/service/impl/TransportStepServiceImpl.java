@@ -21,6 +21,11 @@ public class TransportStepServiceImpl implements ITransportStepService {
         String[] sourceStrArray = address.split("_");
         String str=sourceStrArray[0];
         List<TransportStep>list=transportStepRepository.findAllByProvincesLike("%"+str+"%");
+        for(int i=2;i<list.size();i++){
+            if(!list.get(i).getName().equals(sourceStrArray[1])){
+                list.remove(i);
+            }
+        }
         return list;
     }
 }
