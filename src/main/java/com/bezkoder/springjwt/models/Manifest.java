@@ -22,6 +22,8 @@ public class Manifest {
     @NotBlank
     @Size(max = 200)
     private String endAddress;
+    private int beginId=0;
+    private int endId=0;
     private int payType;   //0先付后到，1先到后付
     private double amount;
     @NotBlank
@@ -34,6 +36,8 @@ public class Manifest {
 
     private Date createDate;
     private int isPay=0;  //是否支付, 默认未支付
+
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -70,6 +74,14 @@ public class Manifest {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public int getBeginId() {
+        return beginId;
+    }
+
+    public void setBeginId(int beginId) {
+        this.beginId = beginId;
     }
 
     public Long getUserId() {
