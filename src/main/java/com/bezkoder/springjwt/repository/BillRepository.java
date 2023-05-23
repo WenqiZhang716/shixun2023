@@ -24,4 +24,7 @@ public interface BillRepository extends JpaRepository<Bill,Long> {
     List<Bill>findAllByUserIdAndStatus(Long userId,int status);
     List<Bill>findAllByUserId(Long userId);
     List<Bill>findAllByUserIdAndPayWay(Long userId,int payWay);
+    @Modifying
+    @Query(value="update Bill b set b.status=:status where b.manifestId=:manifestId")
+    int updateStatusByManifestId(@Param("manifestId")int manifestId,@Param("status")int status);
 }

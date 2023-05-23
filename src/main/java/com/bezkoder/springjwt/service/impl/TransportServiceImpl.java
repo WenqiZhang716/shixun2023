@@ -52,22 +52,25 @@ public class TransportServiceImpl implements ITransportService {
                     list.add(transportStep);
                 }
             }
-            CreateOne(mani.getId(),mani.getBeginAddress(),0,1,1);
+            CreateOne(mani.getId(),mani.getBeginAddress(),0,0,1,1);
             int o=1;
             for (TransportStep transportStep : list) {
                 o++;
-               CreateOne(mani.getId(),transportStep.getName()+"中转站",0,0,o);
+               CreateOne(mani.getId(),transportStep.getName()+"中转站",transportStep.getId(),0,0,o);
             }
-            CreateOne(mani.getId(),mani.getEndAddress(),0,1,++o);
+            CreateOne(mani.getId(),mani.getEndAddress(),0,0,1,++o);
 
 
         }
         List<Transport>tList=getPathList(manifestId);
+        int beginId=tList.get(1).getStepId();
+        int endId=tList.get(tList.size()-2).getStepId();
+        manifestRepository.updateBeginAndEndId(manifestId,beginId,endId);
         return tList;
     }
 
     @Override
-    public int CreateOne(int manifestId, String step, int transporterId, int type,int orders) {
+    public int CreateOne(int manifestId, String step,int stepId, int transporterId, int type,int orders) {
         try{
             Transport trans=new Transport();
             trans.setManifestId(manifestId);
@@ -75,6 +78,7 @@ public class TransportServiceImpl implements ITransportService {
             trans.setTransporterId(transporterId);
             trans.setType(type);
             trans.setOrders(orders);
+            trans.setStepId(stepId);
             transportRepository.save(trans);
             return 1;
         }catch(Exception e){

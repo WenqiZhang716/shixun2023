@@ -20,10 +20,11 @@ public class Transport {
     @NotBlank
     @Size(max = 200)
     private String step;
+    private int stepId=0;
     private int status=0;//0未抵达，1已抵达，2已离开
     private Date arriveTime;
     private int type=0;//0系统自动，1人工
-    private int transporterId=0;//系统自动时为0，人工为1
+    private int transporterId=0;//系统自动时为0，人工为运送者id
     private int orders=0;
 
     public Transport() {
@@ -39,6 +40,14 @@ public class Transport {
 
     public int getOrders() {
         return orders;
+    }
+
+    public int getStepId() {
+        return stepId;
+    }
+
+    public void setStepId(int stepId) {
+        this.stepId = stepId;
     }
 
     public void setOrders(int orders) {

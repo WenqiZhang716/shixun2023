@@ -1,6 +1,7 @@
 package com.bezkoder.springjwt.controllers;
 
 import com.bezkoder.springjwt.models.Bill;
+import com.bezkoder.springjwt.models.Manifest;
 import com.bezkoder.springjwt.models.Transport;
 import com.bezkoder.springjwt.models.TransportStep;
 import com.bezkoder.springjwt.payload.response.DataResponse;
@@ -8,8 +9,10 @@ import com.bezkoder.springjwt.payload.response.MessageResponse;
 import com.bezkoder.springjwt.security.jwt.JwtUtils;
 import com.bezkoder.springjwt.service.ITransportService;
 import com.bezkoder.springjwt.service.ITransportStepService;
+import com.bezkoder.springjwt.service.ITransporterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,17 +32,18 @@ public class TransportController {
     ITransportStepService transportStepService;
     @Autowired
     ITransportService transportService;
+    @Autowired
+    ITransporterService transporterService;
 
     @Autowired
     JwtUtils jwtUtils;
 
     @PostMapping("/path-planning")
-    @PreAuthorize("hasRole('USER') ")
-    public ResponseEntity<?> planPath(@RequestBody Map<String, String> params, @RequestHeader("Authorization") String tokenBearer){
+    public ResponseEntity<?> planPath(@RequestBody Map<String, String> params){
 
         try{
-            String token=tokenBearer.substring(7, tokenBearer.length());
-            Long userId=jwtUtils.getUserIdByJwtToken(token);
+//            String token=tokenBearer.substring(7, tokenBearer.length());
+//            Long userId=jwtUtils.getUserIdByJwtToken(token);
             int id= Integer.parseInt(params.get("manifest-id"));
             transportService.deleteAll(id);
             List<Transport> transportSteps = transportService.pathPlan(id);
@@ -79,38 +83,48 @@ public class TransportController {
         }
 
     }
+    //更改订单状态
     @PostMapping("/change-status")
     @PreAuthorize("hasRole('TRANSPORT') ")
     public ResponseEntity<?> changeStatus(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
-//        String token=tokenBearer.substring(7, tokenBearer.length());
-//        Long userId=jwtUtils.getUserIdByJwtToken(token);
-//        int type=params.get("type").equals("")?-1: Integer.parseInt(params.get("type"));
-//        try{
-//            List<Bill> billList=billService.getBillByType(userId,type);
-//            HashMap<String,Object> map=new HashMap<>();
-//            map.put("bill-list",billList);
-//            return ResponseEntity.ok(new DataResponse(0,map));
-//
-//        }catch(Exception e){
-//            return ResponseEntity.ok(new MessageResponse(1, "获取列表失败"));
-//        }
-        return ResponseEntity.ok(new MessageResponse(1, "获取列表失败"));
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdByJwtToken(token);
+        int manifestId= Integer.parseInt(params.get("manifest-id"));
+        try{
+        int transporterId=transporterService.getIdByUserId(userId);
+        if(transporterId==-1){
+            return ResponseEntity.ok(new MessageResponse(1, "运输员不存在！"));
+        }else{
+            int flag=transporterService.changeManiStatus(manifestId,transporterId);
+            if(flag==0){
+                return ResponseEntity.ok(new MessageResponse(1, "订单不存在！"));
+            }else{
+                return ResponseEntity.ok(new DataResponse(0,new HashMap<>()));
+            }
+        }
+
+
+        }catch(Exception e){
+            return ResponseEntity.ok(new MessageResponse(1, "更新失败"));
+        }
+
     }
-    @PostMapping("/findByType")
+    //根据条件查询所负责订单
+    @PostMapping("/find-by-type")
     @PreAuthorize("hasRole('TRANSPORT') ")
     public ResponseEntity<?> findByType(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
-//        String token=tokenBearer.substring(7, tokenBearer.length());
-//        Long userId=jwtUtils.getUserIdByJwtToken(token);
-//        int type=params.get("type").equals("")?-1: Integer.parseInt(params.get("type"));
-//        try{
-//            List<Bill> billList=billService.getBillByType(userId,type);
-//            HashMap<String,Object> map=new HashMap<>();
-//            map.put("bill-list",billList);
-//            return ResponseEntity.ok(new DataResponse(0,map));
-//
-//        }catch(Exception e){
-//            return ResponseEntity.ok(new MessageResponse(1, "获取列表失败"));
-//        }
-        return ResponseEntity.ok(new MessageResponse(1, "获取列表失败"));
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdByJwtToken(token);
+        //-1全部，1需要取件，2需要送件，3已完成取件，4已完成送件
+        int type=params.get("type").equals("")?-1: Integer.parseInt(params.get("type"));
+        try{
+           List<Manifest>list=transporterService.getListByStatus(userId,type);
+            HashMap<String,Object> map=new HashMap<>();
+            map.put("bill-list",list);
+            return ResponseEntity.ok(new DataResponse(0,map));
+
+        }catch(Exception e){
+            return ResponseEntity.ok(new MessageResponse(1, "获取列表失败"));
+        }
     }
 }

@@ -3,7 +3,7 @@ package com.bezkoder.springjwt.payload.request;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-//只有用户，运输员不登陆了
+//运输员和用户都可以登录
 public class LoginRequest {
 	@NotBlank
 	private String username;

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ITransportService {
     List<Transport> pathPlan(int manifestId);
-    int CreateOne(int manifestId,String step,int transporterId,int type,int orders);
+    int CreateOne(int manifestId,String step,int stepId,int transporterId,int type,int orders);
     int deleteAll(int manifestId);
     List<Transport> getPathList(int manifestId);
 }

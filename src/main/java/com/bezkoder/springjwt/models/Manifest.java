@@ -19,9 +19,11 @@ public class Manifest {
     @NotBlank
     @Size(max = 200)
     private String beginAddress;
+    private int beginId=0;
     @NotBlank
     @Size(max = 200)
     private String endAddress;
+    private int endId=0;
     private int payType;   //0先付后到，1先到后付
     private double amount;
     @NotBlank
@@ -30,7 +32,7 @@ public class Manifest {
     @NotBlank
     @Size(max = 20)
     private String receiverName;
-    private int status=0;//0未发货、1进行中、2已完成、3已取消
+    private int status=0;//0待收件、1进行中、2已完成、3已取消、4待寄件
 
     private Date createDate;
     private int isPay=0;  //是否支付, 默认未支付
@@ -152,5 +154,20 @@ public class Manifest {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+    public int getBeginId() {
+        return beginId;
+    }
+
+    public void setBeginId(int beginId) {
+        this.beginId = beginId;
+    }
+
+    public int getEndId() {
+        return endId;
+    }
+
+    public void setEndId(int endId) {
+        this.endId = endId;
     }
 }
