@@ -127,4 +127,13 @@ public class TransportController {
             return ResponseEntity.ok(new MessageResponse(1, "获取列表失败"));
         }
     }
+
+    //根据条件查询所负责订单
+    @PostMapping("/test2")
+    public ResponseEntity<?> test2(){
+        int a=0;
+            transporterService.beginTimetask(a);
+            return ResponseEntity.ok(new MessageResponse(1, "测试测试"));
+
+    }
 }

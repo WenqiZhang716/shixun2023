@@ -144,4 +144,10 @@ public class TransporterServiceImpl implements ITransporterService {
         }
         return -1;
     }
+
+    @Override
+    public int beginTimetask(int a) {
+        System.out.println("开始启动timeTask a");
+        return 0;
+    }
 }
