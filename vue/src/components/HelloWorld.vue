@@ -41,7 +41,7 @@
 <!--}-->
 <!--</script>-->
 
-<!--&lt;!&ndash; Add "scoped" attribute to limit CSS to this component only &ndash;&gt;-->
+<!--&lt;!&ndash; Add "scoped" attribute to limit CSS to this contents only &ndash;&gt;-->
 <!--<style scoped lang="scss">-->
 <!--h3 {-->
 <!--  margin: 40px 0 0;-->
