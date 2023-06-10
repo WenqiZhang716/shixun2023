@@ -22,6 +22,7 @@
                     </template>
                     <el-menu-item-group >
                         <el-menu-item index="/user/user-info">个人信息</el-menu-item>
+                        <el-menu-item index="/user/change-pw">修改密码</el-menu-item>
                         <el-menu-item index="/user/bank-account">银行卡管理</el-menu-item>
                     </el-menu-item-group>
 
@@ -45,7 +46,6 @@
                         <span class="fontSize">账单管理</span>
                     </template>
                     <el-menu-item-group >
-                        <el-menu-item index="/bill/create">账单创建</el-menu-item>
                         <el-menu-item index="/bill/manage">账单操作</el-menu-item>
                     </el-menu-item-group>
 
@@ -74,7 +74,7 @@
 
 <style lang="less" scoped>
     .el-menu{
-        margin-top: 30px;
+        margin-top: 20px;
         border-right: 0;
         /deep/.is-active{
             background: cornflowerblue !important ;

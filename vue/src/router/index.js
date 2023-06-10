@@ -10,6 +10,7 @@ import ManifestMange from "../views/manifest/manifestManage"
 import BillCreate from "../views/bill/BillCreate"
 import BillMange from "../views/bill/BillManage"
 import Transport from "../views/transport/transportManifest"
+import ChangePW from "../views/user/PasswordChange"
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,12 @@ const routes = [
         path:"/user/user-info",
         name:"userInfo",
         component: UserInfo
+      },
+      {
+        path:"/user/change-pw",
+        name:"changePW",
+        component:ChangePW
+
       },
       {
         path:"/user/bank-account",

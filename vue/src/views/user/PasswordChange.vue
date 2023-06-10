@@ -1,30 +1,23 @@
-
 <template>
-    <div class="login">
-        <!-- 卡片 -->
+    <div>
         <el-card class="box-card" shadow="hover">
-            <h1 style="margin: 10px 0 14px 90px">北交带物流管理系统</h1>
-            <!-- 登录 or 注册 -->
-            <el-radio-group v-model="labelPosition" class="radioGroup" size="small">
-                <el-radio-button label="login">登录</el-radio-button>
-                <el-radio-button label="signIn">注册</el-radio-button>
-            </el-radio-group>
+            <h1 style="margin: 10px 0 14px 90px">修改密码</h1>
             <!-- user输入表单 -->
             <el-form label-position="right" label-width="80px" :model="user">
                 <el-form-item
-                        label="用户名"
-                        prop="name"
-                        :rules="[ { required: true, message: '请输入用户名', trigger: 'blur' } ]">
-                    <el-input v-model="user.name" maxlength="10"></el-input>
+                        label="原密码"
+                        prop="oldPassword"
+                        :rules="[ { required: true, message: '请输入原密码', trigger: 'blur' } ]">
+                    <el-input type="password" v-model="user.password" show-password></el-input>
                 </el-form-item>
                 <el-form-item
-                        label="密码"
+                        label="新密码"
                         prop="password"
                         :rules="[ { required: true, message: '请输入密码', trigger: 'blur' } ]">
                     <el-input type="password" v-model="user.password" show-password></el-input>
                 </el-form-item>
+
                 <el-form-item
-                        v-if="labelPosition==='signIn'"
                         label="确认密码"
                         prop="checkPassword"
                         :rules="[ { required: true, message: '请输入再次输入密码', trigger: 'blur' } ]">
@@ -32,11 +25,8 @@
                 </el-form-item>
                 <!--按钮-->
                 <el-form-item class="button">
-                    <el-button v-if="labelPosition==='login'" type="warning" @click="login"
-                               :disabled="user.name===''||user.password===''" round>登录
-                    </el-button>
-                    <el-button v-if="labelPosition==='signIn'" type="warning" @click="signIn"
-                               :disabled="user.name===''||user.password===''||user.checkPassword===''" round>注册
+                    <el-button  type="warning" @click="signIn"
+                               :disabled="user.password===''||user.checkPassword===''" round>确认修改
                     </el-button>
                     <el-button @click="resetForm" round>重置</el-button>
                 </el-form-item>
@@ -47,7 +37,7 @@
 
 <script>
     export default {
-        name:"IndexLogin",
+        name: "PasswordChange",
         data() {
             return {
                 labelPosition: 'login',  // 开始先定位到登录
@@ -56,6 +46,7 @@
                     name: '',
                     password: '',
                     checkPassword: '',
+                    oldPassword:''
                 }
             }
         },
@@ -68,12 +59,14 @@
             // 注册
             signIn() {
                 if (this.user.checkPassword !== this.user.password) {
-                    this.$message.error("两次输入的密码不一致!")
+                    this.$message.error("两次密码不一致！")
+                }
+                if (this.user.oldPassword === this.user.password) {
+                    this.$message.error("新密码不能与旧密码一样！")
                 }
             },
             // 重置表单
             resetForm() {
-                this.user.name = ""
                 this.user.password = ""
                 this.user.checkPassword = ""
             }
@@ -82,6 +75,7 @@
 </script>
 
 <style lang="less" scoped>
+
     .login{
         width: 100%;
         height: 100%;
@@ -91,7 +85,7 @@
     }
     .box-card {
         width: 480px;
-        margin: 120px 0 0 430px;
+        margin: 20px 0 0 250px;
         border: 1px solid #1f808c;
     }
     .radioGroup{
