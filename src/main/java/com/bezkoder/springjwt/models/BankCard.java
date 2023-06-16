@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 })
 public class BankCard {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
     private Integer id;
 
     private Long userId;

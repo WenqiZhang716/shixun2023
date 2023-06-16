@@ -10,7 +10,7 @@ import java.util.Date;
 @Table(name = "manifest")
 public class Manifest {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
     private Integer id;
     private Long userId;
     private int goodTypeId; //对应goodType表
@@ -32,6 +32,8 @@ public class Manifest {
     @NotBlank
     @Size(max = 20)
     private String receiverName;
+    //物品备注
+    private String beizhu;
     private int status=0;//0待收件、1进行中、2已完成、3已取消、4待寄件
 
     private Date createDate;
@@ -58,6 +60,14 @@ public class Manifest {
         this.createDate = new Date();
         this.status = 0;
         this.isPay=0;
+    }
+
+    public String getBeizhu() {
+        return beizhu;
+    }
+
+    public void setBeizhu(String beizhu) {
+        this.beizhu = beizhu;
     }
 
     public String getReceiverName() {

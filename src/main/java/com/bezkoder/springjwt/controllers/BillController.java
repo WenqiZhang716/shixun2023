@@ -33,7 +33,7 @@ public class BillController {
         String token=tokenBearer.substring(7, tokenBearer.length());
         Long userId=jwtUtils.getUserIdByJwtToken(token);
         String userName=jwtUtils.getUserNameFromJwtToken(token);
-        int manifestId= Integer.parseInt(params.get("manifest-id"));
+        int manifestId= Integer.parseInt(params.get("manifest_id"));
         try{
            int flag= billService.createOne(userId,userName,manifestId);
            if(flag==1){
@@ -70,8 +70,8 @@ public class BillController {
     public ResponseEntity<?> payBill(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
         String token=tokenBearer.substring(7, tokenBearer.length());
         Long userId=jwtUtils.getUserIdByJwtToken(token);
-        int billId = Integer.parseInt(params.get("bill-id"));
-        int orders = Integer.parseInt(params.get("card-order"));
+        int billId = Integer.parseInt(params.get("bill_id"));
+        int orders = Integer.parseInt(params.get("card_order"));
         String password=params.get("password");
 
         try{
@@ -116,5 +116,30 @@ public class BillController {
         }
 
     }
+
+    @PostMapping("/getOne")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?> getOneBill(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdByJwtToken(token);
+        int bill= Integer.parseInt(params.get("manifest_id"));
+        try{
+            Bill flag=billService.getOneBill(bill, Math.toIntExact(userId));
+            Map<String, Object> map=new HashMap<>();
+            map.put("info",flag);
+            System.out.println(bill+"    "+userId);
+            if(flag!=null){
+                return ResponseEntity.ok(new DataResponse(0,map));
+            }else{
+                return ResponseEntity.ok(new MessageResponse(1, "获取订单aaa失败"));
+            }
+
+        }catch(Exception e){
+            return ResponseEntity.ok(new MessageResponse(1, "获取订单aaa失败"));
+        }
+
+    }
+
+
 
 }

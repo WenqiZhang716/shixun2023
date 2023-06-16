@@ -3,9 +3,11 @@ package com.bezkoder.springjwt.service.impl;
 import com.bezkoder.springjwt.models.BankCard;
 import com.bezkoder.springjwt.models.Bill;
 import com.bezkoder.springjwt.models.Manifest;
+import com.bezkoder.springjwt.models.User;
 import com.bezkoder.springjwt.repository.BankCardRepository;
 import com.bezkoder.springjwt.repository.BillRepository;
 import com.bezkoder.springjwt.repository.ManifestRepository;
+import com.bezkoder.springjwt.repository.UserRepository;
 import com.bezkoder.springjwt.service.IBillService;
 import com.bezkoder.springjwt.service.IManifestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class BillServiceImpl implements IBillService {
     BillRepository billRepository;
     @Autowired
     BankCardRepository bankCardRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public int createOne(Long userId,String username, int manifestId) {
@@ -43,24 +47,29 @@ public class BillServiceImpl implements IBillService {
                 double pay=mani.getAmount();
 
                 double payoff=0;
-                if(transportType==0){
+                if(transportType==0){ //普通件
                     payoff=0.3;
-                }else if(transportType==1){
+                }else if(transportType==1){ //快件
                     payoff=0.1;
                 }else {
-                    payoff=0;
+                    payoff=0; //超快件
                 }
                 bill.setManifestId(manifestId);
                 bill.setPayoff(payoff);
+                bill.setAmount(pay);
                 bill.setPayment(pay-pay*payoff);
                 bill.setUserId(userId);
 
                 if(payType==0){
-                    bill.setPayName(username);
+                   Optional<User> user=userRepository.findByUsername(username);
+                    bill.setPayName(user.get().getNickName());
+                    bill.setPayPhone(username);
                     bill.setPayWay(0);
                 }else{
                     bill.setPayName(mani.getReceiverName());
+                    bill.setPayPhone(mani.getReceiverPhone());
                     bill.setPayWay(1);
+                    bill.setStatus(3); //你无需支付
                 }
                 billRepository.save(bill);
               //  manifestRepository.updateIsPay(mani.getId());
@@ -122,5 +131,20 @@ public class BillServiceImpl implements IBillService {
         }
 
         return list;
+    }
+
+    @Override
+    public Bill getOneBill(int manifestId, int userId){
+        Optional<Bill> optional=billRepository.findByManifestId(manifestId);
+        if(optional.isPresent()){
+            Bill b=optional.get();
+            if(b.getUserId()==userId){
+                return b;
+            }else{
+                return null;
+            }
+        }else{
+            return null;
+        }
     }
 }

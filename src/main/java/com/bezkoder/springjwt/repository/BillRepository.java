@@ -27,4 +27,6 @@ public interface BillRepository extends JpaRepository<Bill,Long> {
     @Modifying
     @Query(value="update Bill b set b.status=:status where b.manifestId=:manifestId")
     int updateStatusByManifestId(@Param("manifestId")int manifestId,@Param("status")int status);
+
+    Optional<Bill>findByManifestId(int manifestId);
 }

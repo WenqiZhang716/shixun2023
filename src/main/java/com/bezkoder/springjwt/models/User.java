@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 		})
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
 	private Long id;
 	@NotBlank
 	@Size(max = 20) //对应手机号

@@ -65,9 +65,24 @@ public class BankCardServiceImpl implements IBankCardService {
     }
 
     @Override
-    public int getIdByorder(Long userId, int order) {
+    public int getIdByOrder(Long userId, int order) {
         Optional<BankCard>bank=bankCardRepository.findByUserIdAndOrders(userId,order);
         return 0;
+    }
+
+    @Override
+    public List<Object> getListItem(Long userId) {
+        List<BankCard>list=bankCardRepository.findAllByUserId(userId);
+        List<Object>list2=new ArrayList<>();
+        for(BankCard bank:list){
+            bank.setPassword("*********");
+            Map<String,Object> map=new HashMap<>();
+            map.put("value",bank.getOrders());
+            String label=bank.getBankName()+": "+bank.getCardNum().substring(0,3)+"...";
+            map.put("label",label);
+            list2.add(map);
+        }
+        return list2;
     }
 
 }

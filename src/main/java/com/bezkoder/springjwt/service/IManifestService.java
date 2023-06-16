@@ -12,7 +12,7 @@ import java.util.List;
 public interface IManifestService {
     int createManifest(Long userId,int goodsType,double weight,int transportType,
                        String beginAddress,String endAddress,int payType,
-                       String receiverName,String receiverPhone);
+                       String receiverName,String receiverPhone,String beizhu);
     int cancelOne(int manifestId);
     int changeAddress(int manifestId,String newAddress);
     List<Manifest> findAllManifestByStatus(int status,Long userId);

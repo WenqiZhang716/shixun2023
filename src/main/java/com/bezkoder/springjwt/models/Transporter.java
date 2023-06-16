@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 public class Transporter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
     private Integer id;
 
     private Long userId;//对应user表

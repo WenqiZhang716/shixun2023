@@ -87,4 +87,22 @@ public class BankCardController {
 
     }
 
+
+    @PostMapping("/get-card-choose-list")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?> getCardChooseList(@RequestHeader("Authorization") String tokenBearer){
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdByJwtToken(token);
+        try{
+            List<Object> list=bankCardService.getListItem(userId);
+            HashMap<String,Object>a=new HashMap<>();
+            a.put("bankCardList",list);
+            return ResponseEntity.ok(new DataResponse(0,a));
+
+        }catch(Exception e){
+            return ResponseEntity.ok(new MessageResponse(1, "获取列表失败"));
+        }
+
+    }
+
 }

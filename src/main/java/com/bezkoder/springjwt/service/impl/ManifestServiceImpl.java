@@ -1,6 +1,8 @@
 package com.bezkoder.springjwt.service.impl;
 
+import com.bezkoder.springjwt.models.GoodType;
 import com.bezkoder.springjwt.models.Manifest;
+import com.bezkoder.springjwt.repository.GoodTypeRepository;
 import com.bezkoder.springjwt.repository.ManifestRepository;
 import com.bezkoder.springjwt.repository.UserRepository;
 import com.bezkoder.springjwt.service.IManifestService;
@@ -20,24 +22,31 @@ public class ManifestServiceImpl implements IManifestService {
     @Autowired
     private ManifestRepository manifestRepository;
 
+    @Autowired
+    private GoodTypeRepository goodTypeRepository;
+
 
     @Override
     public int createManifest(Long userId, int goodsType, double weight, int transportType,
-                              String beginAddress, String endAddress, int payType, String receiverName, String receiverPhone) {
+                              String beginAddress, String endAddress, int payType, String receiverName,
+                              String receiverPhone,String beizhu) {
         try{
             Manifest mani=new Manifest();
             mani.setUserId(userId);
-            mani.setGoodTypeId(goodsType);
+            mani.setGoodTypeId(goodsType+1);
             mani.setBeginAddress(beginAddress);
             mani.setEndAddress(endAddress);
             mani.setWeight(weight);
-            mani.setTransportType(transportType);
+            mani.setTransportType(transportType+1);
             mani.setPayType(payType);
             mani.setReceiverName(receiverName);
             mani.setReceiverPhone(receiverPhone);
-            mani.setAmount(weight*1.2);
+            GoodType goodType= goodTypeRepository.findById(goodsType+1);
+            double cost=goodType.getCost();
+            mani.setAmount(weight*cost);
+            mani.setBeizhu(beizhu);
             manifestRepository.save(mani);
-            return 1;
+            return mani.getId();
         }catch(Exception e){
             return 0;
         }

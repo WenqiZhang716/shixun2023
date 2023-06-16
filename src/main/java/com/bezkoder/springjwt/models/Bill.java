@@ -12,18 +12,20 @@ import javax.validation.constraints.Size;
 })
 public class Bill {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
     private Integer id;
 
     private int manifestId;
     private double payoff;
+    private double amount;
     private double payment; //amount*payoff
     private int bankCardId;
-    private int status=0;//0未支付，1已支付，2已取消
+    private int status=0;//0未支付，1已支付，2已取消,3无需支付
     //先付后到是银行卡，先到后付是现金
     private int payWay=0;//0银行卡，1其他方式
     @NotBlank
     private String payName;//支付人姓名
+    private String payPhone;
 
     private Long userId;
 
@@ -60,6 +62,14 @@ public class Bill {
 
     public void setPayName(String payName) {
         this.payName = payName;
+    }
+
+    public String getPayPhone() {
+        return payPhone;
+    }
+
+    public void setPayPhone(String payPhone) {
+        this.payPhone = payPhone;
     }
 
     public int getManifestId() {
@@ -100,5 +110,13 @@ public class Bill {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }

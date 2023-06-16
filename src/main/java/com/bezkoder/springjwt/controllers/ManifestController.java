@@ -8,6 +8,7 @@ import com.bezkoder.springjwt.payload.response.MessageResponse;
 import com.bezkoder.springjwt.repository.ManifestRepository;
 import com.bezkoder.springjwt.repository.UserRepository;
 import com.bezkoder.springjwt.security.jwt.JwtUtils;
+import com.bezkoder.springjwt.service.IGoodsTypeService;
 import com.bezkoder.springjwt.service.IManifestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,9 @@ public class ManifestController {
     @Autowired
     IManifestService manifestService;
 
+    @Autowired
+    IGoodsTypeService goodsTypeService;
+
 
     @Autowired
     JwtUtils jwtUtils;
@@ -47,11 +51,15 @@ public class ManifestController {
         int payType=createManiRequest.getPay_type();
         String receiverName=createManiRequest.getReceiver_name();
         String receiverPhone = createManiRequest.getReceiver_phone();
+        String beizhu=createManiRequest.getBeizhu();
 
         int flag=manifestService.createManifest(userId,goodsType,weight,transportType,
-        beginAddress,endAddress,payType, receiverName,receiverPhone);
-        if(flag==1){
-            return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
+        beginAddress,endAddress,payType, receiverName,receiverPhone,beizhu);
+        System.out.println(flag);
+        Map<String, Object> map=new HashMap<>();
+        map.put("id",flag);
+        if(flag>0){
+            return ResponseEntity.ok(new DataResponse(0,map));
         }else{
             return ResponseEntity.ok(new MessageResponse(1, "创建失败!"));
         }
@@ -105,4 +113,22 @@ public class ManifestController {
         return ResponseEntity.ok(new DataResponse(0,map));
 
     }
+
+    @PostMapping("/get-good-type-list")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?>getGoodTypeList( @RequestHeader("Authorization") String tokenBearer){
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        String username=jwtUtils.getUserNameFromJwtToken(token);
+        List<Object>flag=goodsTypeService.getGoodsTypeList();
+        if(!flag.isEmpty()){
+            Map<String,Object> map=new HashMap<>();
+            map.put("list",flag);
+            return ResponseEntity.ok(new DataResponse(0,map));
+        }else{
+            return ResponseEntity.ok(new MessageResponse(1, "获取货物种类失败!"));
+        }
+    }
+
+
+
 }

@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Table(name = "transport_step")
 public class TransportStep {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
     private Integer id;
     @NotBlank
     @Size(max = 200)

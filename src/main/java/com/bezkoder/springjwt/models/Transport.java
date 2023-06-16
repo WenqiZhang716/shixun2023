@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Table(name = "transport")
 public class Transport {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
     private Integer id;
 
     private int manifestId;

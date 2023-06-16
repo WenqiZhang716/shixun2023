@@ -21,6 +21,8 @@ public class CreateManiRequest {
     @NotBlank
     private String receiver_phone;
 
+    private String beizhu="无";
+
     public int getGoods_type() {
         return goods_type;
     }
@@ -35,6 +37,14 @@ public class CreateManiRequest {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public String getBeizhu() {
+        return beizhu;
+    }
+
+    public void setBeizhu(String beizhu) {
+        this.beizhu = beizhu;
     }
 
     public int getTransport_type() {
