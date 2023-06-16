@@ -21,6 +21,9 @@ public interface BankCardRepository extends JpaRepository<BankCard,Long> {
     @Modifying
     @Query(value="delete from BankCard b where b.userId=:userId and b.orders=:order")
     int deleteByOrdersAndUserId(@Param("order")int order,@Param("userId") Long userId);
+    @Modifying
+    @Query(value="update BankCard b set b.orders=b.orders-1 where b.orders>:order and b.userId=:userId")
+    int updateOrderByOrder(@Param("userId") Long userId, @Param("order") int order);
     Optional<BankCard> findByUserIdAndOrders(Long userId,int orders);
     @Modifying
     @Query(value="update BankCard b set b.amount=:pay where b.id=:cardId")

@@ -110,7 +110,7 @@ public class AuthController {
 		//Set<String> strRoles = signUpRequest.getRoll();
 		Set<Role> roles = new HashSet<>();
 		//只有用户可以注册，运货员由公司发放账号
-		int oneRole=0;
+		int oneRole=1;
 		if (oneRole == -1) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
 					.orElseThrow(() -> new RuntimeException("Error: the role roll is not found."));
@@ -134,5 +134,13 @@ public class AuthController {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
+	}
+
+	@PostMapping("/test")
+	public ResponseEntity<?> test() {
+	    Map<String,Object>map=new HashMap<>();
+	    map.put("aaaa","测试测试测试测试");
+
+		return ResponseEntity.ok(new DataResponse(0,map));
 	}
 }

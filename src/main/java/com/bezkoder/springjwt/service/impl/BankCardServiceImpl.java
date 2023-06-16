@@ -7,8 +7,7 @@ import com.bezkoder.springjwt.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BankCardServiceImpl implements IBankCardService {
@@ -42,16 +41,27 @@ public class BankCardServiceImpl implements IBankCardService {
     @Override
     public int deleteOne(Long userId, int order) {
         int flag=bankCardRepository.deleteByOrdersAndUserId(order,userId);
+        bankCardRepository.updateOrderByOrder(userId,order);
         return 1;
     }
 
     @Override
-    public List<BankCard> getList(Long userId) {
+    public List<Object> getList(Long userId) {
         List<BankCard>list=bankCardRepository.findAllByUserId(userId);
+        List<Object>list2=new ArrayList<>();
         for(BankCard bank:list){
             bank.setPassword("*********");
+            Map<String,Object> map=new HashMap<>();
+            map.put("id",bank.getId());
+            map.put("userId",bank.getUserId());
+            map.put("cardNum",bank.getCardNum());
+            map.put("bankName",bank.getBankName());
+            map.put("amount",String.format("%.2f", bank.getAmount()));
+            map.put("password",bank.getPassword());
+            map.put("orders",bank.getOrders());
+            list2.add(map);
         }
-        return list;
+        return list2;
     }
 
     @Override

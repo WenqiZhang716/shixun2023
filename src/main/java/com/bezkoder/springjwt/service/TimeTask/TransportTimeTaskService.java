@@ -20,11 +20,11 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class TransportTimeTaskService {
 
-    @Async
-    @Scheduled(fixedDelay = 5000) //定时任务在方法上的注解
-    public void timedB(){
-        System.out.println("A 小熊369  "+new Date());
-    }
+//    @Async
+//    @Scheduled(fixedDelay = 5000) //定时任务在方法上的注解
+//    public void timedB(){
+//        System.out.println("A 小熊369  "+new Date());
+//    }
     
 
 

@@ -68,7 +68,7 @@ public class UserController {
 		String userName=jwtUtils.getUserNameFromJwtToken(token);
 		Long id=jwtUtils.getUserIdByJwtToken(token);
 		String password=params.get("password");
-		String newPassword=params.get("newPassword");
+		String newPassword=params.get("new-password");
 		System.out.println(userName);
 		System.out.println(id);
         int flag=0;
@@ -82,12 +82,6 @@ public class UserController {
 			return ResponseEntity.ok(new MessageResponse(1,"密码不正确,无法修改密码!"));
 		}else{
                userRepository.updatePassword(userName,encoder.encode(newPassword));
-//			Authentication authentication = authenticationManager.authenticate(
-//					new UsernamePasswordAuthenticationToken(userName, newPassword));
-//
-//			String jwt = jwtUtils.generateJwtToken(authentication);
-//			HashMap<String, Object>a=new HashMap<String, Object>();
-//			a.put("token",jwt);
 			return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
 		}
 
@@ -110,18 +104,20 @@ public class UserController {
 		}
 
 		String nickName=params.get("nickName");
+		String realName=params.get("realName");
 		int age= Integer.parseInt(params.get("age"));
 		int sex=Integer.parseInt(params.get("sex"));
-		String address=params.get("default_address");
+		String address=params.get("defaultAddress");
 		String username=jwtUtils.getUserNameFromJwtToken(token);
 		Optional<User> user=userRepository.findByUsername(username);
 		if(user.isPresent()){
 			if(userService.isUser(username)==0){
 				age=age==-1?user.get().getAge():age;
 				nickName= nickName.equals("") ? user.get().getNickName() : nickName;
+				realName= realName.equals("") ? user.get().getRealName() : realName;
 				sex= sex == -1 ? user.get().getSex() : sex;
 				address= address.equals("") ?user.get().getDefaultAddress():address;
-				int flag=userRepository.updateUserInfo(username,nickName,age,sex,address);
+				int flag=userRepository.updateUserInfo(username,realName,nickName,age,sex,address);
 				return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
 			}else{
 				return ResponseEntity.ok(new MessageResponse(1, "用户不存在!"));
@@ -147,12 +143,12 @@ public class UserController {
 		if(IsUser.isPresent()){
 			User user=IsUser.get();
 			map.put("id",user.getId());
-			map.put("userName",user.getUsername());
-			map.put("nickName",user.getNickName());
+			map.put("name",user.getUsername());
+			map.put("nickname",user.getNickName());
 			map.put("age",user.getAge());
 			map.put("sex",user.getSex());
-			map.put("default_address",user.getDefaultAddress());
-			map.put("is_check",user.getIsCheck());
+			map.put("address",user.getDefaultAddress());
+			map.put("isCheck",user.getIsCheck());
 			map.put("realName",user.getRealName());
 
 			return ResponseEntity.ok(new DataResponse(0,map));

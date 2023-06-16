@@ -30,8 +30,9 @@ public class BankCardController {
     @PostMapping("/add-bankcard")
     @PreAuthorize("hasRole('USER') ")
     public ResponseEntity<?> AddBankCard(@RequestBody Map<String, String> params, @RequestHeader("Authorization") String tokenBearer){
-        String bankCard = params.get("bank-card");
-        String bankName=params.get("bank-name");
+        String bankCard = params.get("bank_card");
+        String bankName=params.get("bank_name");
+        System.out.println(bankName+" :"+bankCard);
         if(bankCard.equals("")||bankName.equals("")){
             return ResponseEntity.ok(new MessageResponse(1, "银行卡号与开户行名称不能为空!"));
         }
@@ -75,9 +76,9 @@ public class BankCardController {
         String token=tokenBearer.substring(7, tokenBearer.length());
         Long userId=jwtUtils.getUserIdByJwtToken(token);
         try{
-            List<BankCard> list=bankCardService.getList(userId);
+            List<Object> list=bankCardService.getList(userId);
             HashMap<String,Object>a=new HashMap<>();
-            a.put("bankCard-list",list);
+            a.put("bankCardList",list);
             return ResponseEntity.ok(new DataResponse(0,a));
 
         }catch(Exception e){
