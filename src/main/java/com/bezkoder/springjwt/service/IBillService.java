@@ -11,6 +11,6 @@ public interface IBillService {
     int createOne(Long userId,String username,int manifestId);
     int payOne(Long userId,int billId,int cardOrder,String password);
     int cancelBill(int bill);
-    List<Bill>getBillByType(Long userId,int type);
+    List<Object>getBillByType(Long userId,int type);
     Bill getOneBill(int manifestId,int userId);
 }

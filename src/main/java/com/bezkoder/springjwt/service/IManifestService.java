@@ -15,7 +15,7 @@ public interface IManifestService {
                        String receiverName,String receiverPhone,String beizhu);
     int cancelOne(int manifestId);
     int changeAddress(int manifestId,String newAddress);
-    List<Manifest> findAllManifestByStatus(int status,Long userId);
+    List<Object> findAllManifestByStatus(int status,Long userId);
 
 }
 

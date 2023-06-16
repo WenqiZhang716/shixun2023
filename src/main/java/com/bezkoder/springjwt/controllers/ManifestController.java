@@ -106,7 +106,7 @@ public class ManifestController {
         int type=params.get("type").equals("")?-1: Integer.parseInt(params.get("type"));
         String token=tokenBearer.substring(7, tokenBearer.length());
         Long userId=jwtUtils.getUserIdByJwtToken(token);
-        List<Manifest> list=manifestService.findAllManifestByStatus(type,userId);
+        List<Object> list=manifestService.findAllManifestByStatus(type,userId);
         HashMap<String,Object> map=new HashMap<>();
         map.put("manifest-list",list);
 

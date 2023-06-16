@@ -55,9 +55,9 @@ public class BillController {
         Long userId=jwtUtils.getUserIdByJwtToken(token);
         int type=params.get("type").equals("")?-1: Integer.parseInt(params.get("type"));
         try{
-            List<Bill> billList=billService.getBillByType(userId,type);
+            List<Object> billList=billService.getBillByType(userId,type);
             HashMap<String,Object> map=new HashMap<>();
-            map.put("bill-list",billList);
+            map.put("bill_list",billList);
             return ResponseEntity.ok(new DataResponse(0,map));
 
         }catch(Exception e){

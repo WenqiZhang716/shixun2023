@@ -13,9 +13,7 @@ import com.bezkoder.springjwt.service.IManifestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author zhangwq
@@ -120,7 +118,7 @@ public class BillServiceImpl implements IBillService {
     }
 
     @Override
-    public List<Bill> getBillByType(Long userId, int type) {
+    public List<Object> getBillByType(Long userId, int type) {
         List<Bill>list=new ArrayList<>() ;
         if(type==-1){
            list=billRepository.findAllByUserId(userId);
@@ -130,7 +128,24 @@ public class BillServiceImpl implements IBillService {
             list=billRepository.findAllByUserIdAndStatus(userId, type);
         }
 
-        return list;
+        List<Object>list2=new ArrayList<>();
+        for(Bill b :list){
+            Map<String,Object>map=new HashMap<>();
+            map.put("id", b.getId());
+            map.put("manifestId", b.getManifestId());
+            map.put( "payoff", b.getPayoff());
+             map.put( "amount", b.getAmount());
+             map.put( "payment", b.getPayment());
+             map.put( "bankCardId", b.getBankCardId());
+             map.put( "status", b.getStatus());
+             map.put( "payWay", b.getPayWay());
+             map.put( "payName", b.getPayName());
+             map.put( "payPhone", b.getPayPhone());
+             map.put( "userId",b.getUserId());
+             list2.add(map);
+        }
+
+        return list2;
     }
 
     @Override

@@ -9,9 +9,7 @@ import com.bezkoder.springjwt.service.IManifestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author zhangwq
@@ -86,7 +84,7 @@ public class ManifestServiceImpl implements IManifestService {
     }
 
     @Override
-    public List<Manifest> findAllManifestByStatus(int status,Long userId) {
+    public List<Object> findAllManifestByStatus(int status,Long userId) {
         //0未发货、1进行中、2已完成、3已取消
         ArrayList<Manifest>list=new ArrayList<>();
         if(status==0||status==1||status==2||status==3){
@@ -95,11 +93,30 @@ public class ManifestServiceImpl implements IManifestService {
         }else{
             list= (ArrayList<Manifest>) manifestRepository.findAllByUserId(userId);
         }
-//        while(!list.isEmpty()){
-//
-//        }
+        List<Object>list2=new ArrayList<>();
+        for(Manifest manifest:list){
+            Map<String,Object> map=new HashMap<>();
+            map.put("id", manifest.getId());
+            map.put("userId", manifest.getUserId());
+            map.put("goodTypeId", manifest.getGoodTypeId());
+            map.put("weight", manifest.getWeight());
+            map.put("transportType", manifest.getTransportType());
+            map.put("beginAddress", manifest.getBeginAddress());
+            map.put("beginId", manifest.getBeginId());
+            map.put("endAddress", manifest.getEndAddress());
+            map.put("endId", manifest.getEndId());
+            map.put("payType", manifest.getPayType());
+            map.put("amount", manifest.getAmount());
+            map.put("receiverPhone", manifest.getReceiverPhone());
+            map.put("receiverName", manifest.getReceiverName());
+            map.put("beizhu", manifest.getBeizhu());
+            map.put("status", manifest.getStatus());
+            map.put("createDate", manifest.getCreateDate());
+            map.put("isPay", manifest.getIsPay());
+            list2.add(map);
+        }
 
-        return list;
+        return list2;
     }
 
 }
