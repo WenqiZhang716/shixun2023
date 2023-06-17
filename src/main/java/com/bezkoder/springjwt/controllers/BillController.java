@@ -70,6 +70,7 @@ public class BillController {
     public ResponseEntity<?> payBill(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
         String token=tokenBearer.substring(7, tokenBearer.length());
         Long userId=jwtUtils.getUserIdByJwtToken(token);
+        //改成用货单id了！！！
         int billId = Integer.parseInt(params.get("bill_id"));
         int orders = Integer.parseInt(params.get("card_order"));
         String password=params.get("password");

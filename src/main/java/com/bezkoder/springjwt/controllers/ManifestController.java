@@ -108,7 +108,7 @@ public class ManifestController {
         Long userId=jwtUtils.getUserIdByJwtToken(token);
         List<Object> list=manifestService.findAllManifestByStatus(type,userId);
         HashMap<String,Object> map=new HashMap<>();
-        map.put("manifest-list",list);
+        map.put("manifest_list",list);
 
         return ResponseEntity.ok(new DataResponse(0,map));
 
@@ -128,6 +128,24 @@ public class ManifestController {
             return ResponseEntity.ok(new MessageResponse(1, "获取货物种类失败!"));
         }
     }
+
+
+    @PostMapping("/get-one-detail")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?>getOneDetail( @RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
+        int manifestId = Integer.parseInt(params.get("id"));
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdFromJwtToken(token);
+        Map<String,Object> map=manifestService.getOneDetail(manifestId,userId);
+        if(map!=null){
+            Map<String,Object> map2=new HashMap<>();
+            map2.put("info",map);
+            return ResponseEntity.ok(new DataResponse(0,map2));
+        }else{
+            return ResponseEntity.ok(new MessageResponse(1, "获取货物种类失败!"));
+        }
+    }
+
 
 
 

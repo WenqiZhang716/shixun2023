@@ -4,15 +4,13 @@ import com.bezkoder.springjwt.models.BankCard;
 import com.bezkoder.springjwt.models.Bill;
 import com.bezkoder.springjwt.models.Manifest;
 import com.bezkoder.springjwt.models.User;
-import com.bezkoder.springjwt.repository.BankCardRepository;
-import com.bezkoder.springjwt.repository.BillRepository;
-import com.bezkoder.springjwt.repository.ManifestRepository;
-import com.bezkoder.springjwt.repository.UserRepository;
+import com.bezkoder.springjwt.repository.*;
 import com.bezkoder.springjwt.service.IBillService;
 import com.bezkoder.springjwt.service.IManifestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -30,6 +28,8 @@ public class BillServiceImpl implements IBillService {
     BankCardRepository bankCardRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    TransportRepository transportRepository;
 
     @Override
     public int createOne(Long userId,String username, int manifestId) {
@@ -70,7 +70,6 @@ public class BillServiceImpl implements IBillService {
                     bill.setStatus(3); //你无需支付
                 }
                 billRepository.save(bill);
-              //  manifestRepository.updateIsPay(mani.getId());
                 return 1;
             }else{
                 return 0;
@@ -81,8 +80,9 @@ public class BillServiceImpl implements IBillService {
     }
 
     @Override
+    //改成通过货单找了
     public int payOne(Long userId,int billId, int cardOrder, String password) {
-        Optional<Bill>bill=billRepository.findById(billId);
+        Optional<Bill>bill=billRepository.findByManifestId(billId);
         Optional<BankCard>bank=bankCardRepository.findByUserIdAndOrders(userId,cardOrder);
         if(bill.isPresent()&&bank.isPresent()){
             Bill bil=bill.get();
@@ -103,8 +103,10 @@ public class BillServiceImpl implements IBillService {
                 return 5;
             }
             bankCardRepository.updateAmount(cardId,card.getAmount()-pay);
-            billRepository.updatePayStatus(bil.getId(),cardId,1);
+            billRepository.updatePayStatus(bil.getManifestId(),cardId,1,new Date());
             manifestRepository.updateIsPay(manifestId);
+            //支付后才进入定时模拟阶段
+            transportRepository.updateValidByManifestId(manifestId);
 
             return 1;
         }
@@ -113,12 +115,13 @@ public class BillServiceImpl implements IBillService {
 
     @Override
     public int cancelBill(int id){
-        int flag=billRepository.updatePayStatus(id,0,2);
+        int flag=billRepository.updatePayStatus(id,0,2,new Date());
         return flag;
     }
 
     @Override
     public List<Object> getBillByType(Long userId, int type) {
+        //0未支付，1已支付，2已取消,3无需支付
         List<Bill>list=new ArrayList<>() ;
         if(type==-1){
            list=billRepository.findAllByUserId(userId);
@@ -131,17 +134,41 @@ public class BillServiceImpl implements IBillService {
         List<Object>list2=new ArrayList<>();
         for(Bill b :list){
             Map<String,Object>map=new HashMap<>();
+            String zt="";
+            String tag="";
+            if(b.getStatus()==0){
+                zt="未支付";
+                tag="warning";
+            }else if(b.getStatus()==1){
+                zt="已支付";
+                tag="success";
+            }else if(b.getStatus()==2){
+                zt="已取消";
+                tag="danger";
+            }else if(b.getStatus()==3){
+                zt="您无需支付";
+                tag="info";
+            }
             map.put("id", b.getId());
             map.put("manifestId", b.getManifestId());
             map.put( "payoff", b.getPayoff());
              map.put( "amount", b.getAmount());
              map.put( "payment", b.getPayment());
              map.put( "bankCardId", b.getBankCardId());
-             map.put( "status", b.getStatus());
-             map.put( "payWay", b.getPayWay());
+             map.put( "status", zt);
+             map.put( "payWay", b.getPayWay()==0?"先付后到":"先到后付");
              map.put( "payName", b.getPayName());
              map.put( "payPhone", b.getPayPhone());
              map.put( "userId",b.getUserId());
+             map.put( "tag",tag);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            if(b.getPayDate()!=null){
+                String format = simpleDateFormat.format(b.getPayDate());
+                map.put( "date", format);
+            }else{
+                String format="";
+                map.put( "date", format);
+            }
              list2.add(map);
         }
 

@@ -5,6 +5,7 @@ import com.bezkoder.springjwt.models.Manifest;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangwq
@@ -16,6 +17,7 @@ public interface IManifestService {
     int cancelOne(int manifestId);
     int changeAddress(int manifestId,String newAddress);
     List<Object> findAllManifestByStatus(int status,Long userId);
+    Map<String,Object> getOneDetail(int id, Long userId);
 
 }
 

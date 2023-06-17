@@ -39,4 +39,8 @@ public interface ManifestRepository extends JpaRepository<Manifest,Long> {
     @Query(value="update Manifest m set m.status=:status where m.id=:manifestId")
     int updateStatusByManiId(@Param("manifestId")int manifestId,@Param("status")int status);
 
+    List<Manifest>findAllByStatusAndIsPayAndPayType(int status,int isPay,int payType);
+    List<Manifest>findAllByIsPayAndPayType(int isPay,int payType);
+    List<Manifest>findAllByPayType(int payType);
+
 }

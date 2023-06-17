@@ -2,6 +2,7 @@ package com.bezkoder.springjwt.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * @author zhangwq
@@ -26,6 +27,7 @@ public class Bill {
     @NotBlank
     private String payName;//支付人姓名
     private String payPhone;
+    private Date payDate; //其实是操作时间，支付或取消的话，时间都会记录
 
     private Long userId;
 
@@ -38,6 +40,14 @@ public class Bill {
     }
 
     public Bill() {
+    }
+
+    public Date getPayDate() {
+        return payDate;
+    }
+
+    public void setPayDate(Date payDate) {
+        this.payDate = payDate;
     }
 
     public Integer getId() {

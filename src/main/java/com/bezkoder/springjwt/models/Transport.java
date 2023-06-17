@@ -23,9 +23,11 @@ public class Transport {
     private int stepId=0;
     private int status=0;//0未抵达，1已抵达，2已离开
     private Date arriveTime;
+    private Date leaveTime;
     private int type=0;//0系统自动，1人工
     private int transporterId=0;//系统自动时为0，人工为运送者id
     private int orders=0;
+    private int isValid=0; //0未进入定时模拟，1已经入定时模拟
 
     public Transport() {
     }
@@ -100,5 +102,21 @@ public class Transport {
 
     public void setTransporterId(int transporterId) {
         this.transporterId = transporterId;
+    }
+
+    public int getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(int isValid) {
+        this.isValid = isValid;
+    }
+
+    public Date getLeaveTime() {
+        return leaveTime;
+    }
+
+    public void setLeaveTime(Date leaveTime) {
+        this.leaveTime = leaveTime;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +20,8 @@ public interface BillRepository extends JpaRepository<Bill,Long> {
 
     Optional<Bill>findById(int id);
     @Modifying
-    @Query(value="update Bill b set b.status=:status,b.bankCardId=:bankCardId where b.id=:billId")
-    int updatePayStatus(@Param("billId")int billId,@Param("bankCardId")int bankCardId,@Param("status")int status);
+    @Query(value="update Bill b set b.status=:status,b.bankCardId=:bankCardId,b.payDate=:date where b.manifestId=:billId")
+    int updatePayStatus(@Param("billId")int billId,@Param("bankCardId")int bankCardId,@Param("status")int status,@Param("date") Date date);
     List<Bill>findAllByUserIdAndStatus(Long userId,int status);
     List<Bill>findAllByUserId(Long userId);
     List<Bill>findAllByUserIdAndPayWay(Long userId,int payWay);

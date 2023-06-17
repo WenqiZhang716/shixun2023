@@ -44,7 +44,7 @@ public class TransportController {
         try{
 //            String token=tokenBearer.substring(7, tokenBearer.length());
 //            Long userId=jwtUtils.getUserIdByJwtToken(token);
-            int id= Integer.parseInt(params.get("manifest-id"));
+            int id= Integer.parseInt(params.get("manifest_id"));
             transportService.deleteAll(id);
             List<Transport> transportSteps = transportService.pathPlan(id);
             HashMap<String, Object> map=new HashMap<>();
@@ -72,7 +72,7 @@ public class TransportController {
     public ResponseEntity<?> GetStatusList(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
         String token=tokenBearer.substring(7, tokenBearer.length());
         Long userId=jwtUtils.getUserIdByJwtToken(token);
-        int manifestId= Integer.parseInt(params.get("manifest-id"));
+        int manifestId= Integer.parseInt(params.get("manifest_id"));
         try{
             List<Transport>list=transportService.getPathList(manifestId);
             HashMap<String, Object> map=new HashMap<>();
@@ -83,13 +83,50 @@ public class TransportController {
         }
 
     }
+
+    @PostMapping("/get-step-info-list")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?> GetStepInfoList(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdByJwtToken(token);
+        int manifestId= Integer.parseInt(params.get("manifest_id"));
+        try{
+            List<Object>list=transportService.getStepInfo(manifestId);
+            HashMap<String, Object> map=new HashMap<>();
+            map.put("path",list);
+            return ResponseEntity.ok(new DataResponse(0,map));
+        }catch(Exception e){
+            return ResponseEntity.ok(new MessageResponse(1, "获取列表失败"));
+        }
+
+    }
+
+
+
+    @PostMapping("/deleteOne")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?> deleteOne(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdByJwtToken(token);
+        int manifestId= Integer.parseInt(params.get("manifest_id"));
+        try{
+            int flag=transportService.deleteAll(manifestId);
+            HashMap<String, Object> map=new HashMap<>();
+            return ResponseEntity.ok(new DataResponse(0,map));
+        }catch(Exception e){
+            return ResponseEntity.ok(new MessageResponse(1, "删除失败！"));
+        }
+
+    }
+
+
     //更改订单状态
     @PostMapping("/change-status")
     @PreAuthorize("hasRole('TRANSPORT') ")
     public ResponseEntity<?> changeStatus(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
         String token=tokenBearer.substring(7, tokenBearer.length());
         Long userId=jwtUtils.getUserIdByJwtToken(token);
-        int manifestId= Integer.parseInt(params.get("manifest-id"));
+        int manifestId= Integer.parseInt(params.get("manifest_id"));
         try{
         int transporterId=transporterService.getIdByUserId(userId);
         if(transporterId==-1){
@@ -120,7 +157,7 @@ public class TransportController {
         try{
            List<Manifest>list=transporterService.getListByStatus(userId,type);
             HashMap<String,Object> map=new HashMap<>();
-            map.put("bill-list",list);
+            map.put("bill_list",list);
             return ResponseEntity.ok(new DataResponse(0,map));
 
         }catch(Exception e){
@@ -128,12 +165,13 @@ public class TransportController {
         }
     }
 
-    //根据条件查询所负责订单
-    @PostMapping("/test2")
-    public ResponseEntity<?> test2(){
-        int a=0;
-            transporterService.beginTimetask(a);
-            return ResponseEntity.ok(new MessageResponse(1, "测试测试"));
+//    //根据条件查询所负责订单
+//    @PostMapping("/test2")
+//    public ResponseEntity<?> test2(){
+//        int a=0;
+//            transporterService.beginTimetask(a);
+//            return ResponseEntity.ok(new MessageResponse(1, "测试测试"));
+//
+//    }
 
-    }
 }

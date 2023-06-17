@@ -34,7 +34,7 @@ public class Manifest {
     private String receiverName;
     //物品备注
     private String beizhu;
-    private int status=0;//0待收件、1进行中、2已完成、3已取消、4待寄件
+    private int status=0;//0待收件、1进行中、2已完成、3已取消
 
     private Date createDate;
     private int isPay=0;  //是否支付, 默认未支付

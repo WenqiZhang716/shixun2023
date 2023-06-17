@@ -11,10 +11,7 @@ import com.bezkoder.springjwt.service.ITransportStepService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author zhangwq
@@ -59,13 +56,17 @@ public class TransportServiceImpl implements ITransportService {
                CreateOne(mani.getId(),transportStep.getName()+"中转站",transportStep.getId(),0,0,o);
             }
             CreateOne(mani.getId(),mani.getEndAddress(),0,0,1,++o);
-
-
+            //先付后到，默认直接进入定时刷新状态
+            if(mani.getPayType()==1){
+                transportRepository.updateValidByManifestId(mani.getId());
+            }
         }
         List<Transport>tList=getPathList(manifestId);
         int beginId=tList.get(1).getStepId();
         int endId=tList.get(tList.size()-2).getStepId();
         manifestRepository.updateBeginAndEndId(manifestId,beginId,endId);
+
+
         return tList;
     }
 
@@ -99,5 +100,31 @@ public class TransportServiceImpl implements ITransportService {
         List<Transport>tList=new ArrayList<>();
         tList=transportRepository.findAllByManifestId(manifestId);
         return tList;
+    }
+
+    @Override
+    public List<Object> getStepInfo(int manifestId) {
+        List<Transport>list=getPathList(manifestId);
+        List<Object> list2=new ArrayList<>();
+
+        for(Transport t:list){
+            Map<String,Object>map=new HashMap<>();
+            map.put("title",t.getOrders()+":"+t.getStep());
+            String des="";
+            if(t.getStatus()==0){
+                des="未抵达";
+            }else if(t.getStatus()==1){
+                des="已抵达"+"\n"+"抵达时间: "+t.getArriveTime();
+            }else if(t.getStatus()==2){
+                des="已完成中转"+"\n"+"抵达时间: "+t.getArriveTime();
+                if(!(t.getOrders()>1&&t.getStepId()==0)){
+                    des=des+"\n"+"离开时间 :"+t.getLeaveTime();
+                }
+            }
+            map.put("desc",des);
+            list2.add(map);
+
+        }
+        return list2;
     }
 }

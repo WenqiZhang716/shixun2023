@@ -14,4 +14,5 @@ public interface ITransportService {
     int CreateOne(int manifestId,String step,int stepId,int transporterId,int type,int orders);
     int deleteAll(int manifestId);
     List<Transport> getPathList(int manifestId);
+    List<Object> getStepInfo(int manifestId);
 }
