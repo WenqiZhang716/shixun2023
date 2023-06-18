@@ -1,103 +1,87 @@
 <template>
     <div>
         <el-card class="box-card" shadow="hover">
-            <h1>银行卡管理</h1>
+            <h1 class="userTitle">银行卡管理</h1>
+
             <el-container id="content">
+                <!--header里面是按钮-->
+
                 <el-header>
                     <el-row>
-                        <el-col :span="10">
-                            <el-button type="danger" @click="delAll" style="float: left">删除货单</el-button>
+                        <el-col :span="30">
                             <el-popover
                                     v-model="visible"
                                     placement="right"
                                     width="400"
                                     trigger="click"
                                     :open-delay="200"
-                                    :close-delay="200"
-                            >
+                                    :close-delay="200">
+                                <h1 class="userTitle">新增一张银行卡</h1>
                                 <el-form
                                         :model="validateForm"
                                         ref="validateForm"
                                         label-width="100px"
-                                        class="demo-ruleForm"
-                                >
+                                        class="demo-ruleForm">
                                     <el-form-item
-                                            label="年龄"
-                                            prop="age"
-                                            :rules="[{ required: true, message: '年龄不能为空' }]"
-                                    >
+                                            label="所属银行"
+                                            prop="bankname"
+                                            :rules="[{ required: true, message: '银行不能为空' }]">
                                         <el-input
-                                                type="age"
-                                                v-model="validateForm.age"
-                                                autocomplete="off"
-                                        ></el-input>
+                                                type="text"
+                                                v-model="validateForm.bankname" autocomplete="off" ></el-input>
 
                                     </el-form-item>
                                     <el-form-item
-                                            label="名称"
-                                            prop="name"
-                                            :rules="[{ required: true, message: '姓名不能为空' }]"
-                                    >
-                                        <el-input
-                                                type="name"
-                                                v-model="validateForm.name"
-                                                autocomplete="off"
-                                        ></el-input>
+                                            label="银行卡号"
+                                            prop="cardNum"
+                                            :rules="[{ required: true, message: '卡号不能为空' }]">
+                                        <el-input type="name" v-model="validateForm.cardNum" autocomplete="off"></el-input>
                                     </el-form-item>
+
                                     <el-form-item>
-                                        <el-button type="primary" @click="submitForm('validateForm')">提交</el-button>
-                                        <el-button @click="resetForm('validateForm')">重置</el-button>
+                                        <el-button type="primary" @click="submitForm('validateForm')"
+                                                   :disabled="validateForm.bankname===''||validateForm.cardNum===''||validateForm.password===''" round>提交</el-button>
+                                        <el-button @click="resetForm('validateForm')" round>重置</el-button>
+                                        <el-button type="warning" @click="visible=false" round>取消</el-button>
                                     </el-form-item>
                                 </el-form>
-                                <el-button slot="reference" type="primary" style="margin-left:30px ">修改地址</el-button>
+                                    <el-button slot="reference" type="primary" :disabled="tableData.length>=5">添加</el-button>
+
                             </el-popover>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-input
-                                    clearable
-                                    v-model="searchInput.age"
-                                    placeholder="请输入年龄搜索"
-                                    @input="searchCommon"
-                            ></el-input>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-input
-                                    clearable
-                                    v-model="searchInput.name"
-                                    placeholder="请输入名字搜索"
-                                    @input="searchCommon"
-                            ></el-input>
+
                         </el-col>
                     </el-row>
                 </el-header>
+
                 <el-main>
                     <el-table
-                            :data="tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)"
-                            style="width: 100%"
-                            stripe
-                            @selection-change="handleSelectionChange"
-                    >
-                        <el-table-column type="selection" width="55"> </el-table-column>
-
-                        <el-table-column label="年龄" prop="age">
+                            :data="tableData" style="width: 100%" stripe @selection-change="handleSelectionChange">
+<!--                        <el-table-column type="selection" width="55"> </el-table-column>-->
+                        <!--定义列1-->
+                        <el-table-column label="序号" prop="BankId" fixed>
                             <template slot-scope="scope">
-                                <el-input v-if="scope.row.editable" v-model="scope.row.age" @input="inputCodeRow(scope.$index, scope.row)">{{
-                                    scope.row.age
-                                    }}</el-input>
-                                <span v-else
-                                >{{ scope.row.age }}
-              </span>
+                                <el-input v-if="scope.row.editable" v-model="scope.row.orders" @input="inputCodeRow(scope.$index, scope.row)">{{scope.row.orders }}</el-input>
+                                <span v-else>{{ scope.row.orders }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="所属银行" prop="bank">
+                            <template slot-scope="scope">
+                                <el-input v-if="scope.row.editable" v-model="scope.row.bankName" @input="inputCodeRow(scope.$index, scope.row)">{{scope.row.bankName}}</el-input>
+                                <span v-else>{{ scope.row.bankName }}</span>
                             </template>
                         </el-table-column>
 
-                        <el-table-column label="名字" prop="name">
+                        <el-table-column label="卡号" prop="BankNum">
                             <template slot-scope="scope">
-                                <el-input v-if="scope.row.editable" v-model="scope.row.name" @input="inputCodeRow(scope.$index, scope.row)">{{
-                                    scope.row.name
-                                    }}</el-input>
-                                <span  v-else
-                                >{{ scope.row.name }}
-              </span>
+                                <el-input v-if="scope.row.editable" v-model="scope.row.cardNum" @input="inputCodeRow(scope.$index, scope.row)">{{scope.row.cardNum }}</el-input>
+                                <span  v-else>{{ scope.row.cardNum}}</span>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column label="余额" prop="amount">
+                            <template slot-scope="scope">
+                                <el-input v-if="scope.row.editable" v-model="scope.row.amount" @input="inputCodeRow(scope.$index, scope.row)">{{scope.row.amount }}</el-input>
+                                <span  v-else>{{ scope.row.amount}}</span>
                             </template>
                         </el-table-column>
 
@@ -108,27 +92,25 @@
                                         v-show="!scope.row.editable"
                                         size="mini"
                                         type="danger"
-                                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                                <el-button
-                                        v-show="!scope.row.editable"
-                                        size="mini"
-                                        type="primary"
-                                        @click="handleDelete(scope.$index, scope.row)">查看详情</el-button>
+                                        @click="handleDelete(scope.$index, scope.row)" round>删除</el-button>
+
                             </template>
                         </el-table-column>
                     </el-table>
                     <template>
-                        <el-pagination
-                                @current-change="handleCurrentChange"
-                                @size-change="handleSizeChange"
-                                :current-page.sync="currentPage"
-                                :page-sizes="[5, 10, 15, 20]"
-                                :page-size="pageSize"
-                                layout="total,sizes,prev, pager, next, jumper"
-                                :total="tableData.length"
-                        >
-                        </el-pagination>
+                        <h5 class="userTitle">注：最多能添加五张银行卡</h5>
                     </template>
+<!--                    <template>-->
+<!--                        <el-pagination-->
+<!--                                @current-change="handleCurrentChange"-->
+<!--                                @size-change="handleSizeChange"-->
+<!--                                :current-page.sync="currentPage"-->
+<!--                                :page-sizes="[5, 10, 15, 20]"-->
+<!--                                :page-size="pageSize"-->
+<!--                                layout="total,sizes,prev, pager, next, jumper"-->
+<!--                                :total="tableData.length">-->
+<!--                        </el-pagination>-->
+<!--                    </template>-->
                 </el-main>
             </el-container>
         </el-card>
@@ -136,6 +118,8 @@
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: "BankAccount",
         data() {
@@ -158,78 +142,15 @@
                 originalData: [],
                 //表格数据相关
                 tableData: [
-                    {
-                        id:100,
-                        age:"20",
-                        name:'李四',
-                        editable:false,
-                    },
-                    {
-                        id:101,
-                        age:"20",
-                        name:'张三',
-                        editable:false,
-                    },
-                    {
-                        id:102,
-                        age:"20",
-                        name:'王五',
-                        editable:false,
-                    },
-                    {
-                        id:103,
-                        age:"18",
-                        name:'张三',
-                        editable:false,
-                    },
-                    {
-                        id:104,
-                        age:"10",
-                        name:'小陈',
-                        editable:false,
-                    },
-                    {
-                        id:105,
-                        age:"20",
-                        name:'小陈',
-                        editable:false,
-                    },
-                    {
-                        id:106,
-                        age:"25",
-                        name:'小丽',
-                        editable:false,
-                    },
-                    {
-                        id:107,
-                        age:"20",
-                        name:'张三',
-                        editable:false,
-                    },
-                    {
-                        id:108,
-                        age:"21",
-                        name:'张三',
-                        editable:false,
-                    },
-                    {
-                        id:109,
-                        age:"30",
-                        name:'张三',
-                        editable:false,
-                    },
-                    {
-                        id:110,
-                        age:"45",
-                        name:'麻子',
-                        editable:false,
-                    },
-                    {
-                        id:111,
-                        age:"40",
-                        name:'狗二蛋',
-                        editable:false,
-                    }],
+                    // {
+                    //     orders:100,
+                    //     bankName:'中国银行',
+                    //     cardNum:'123456',
+                    //     amount:84,
+                    //     name:'李四',
+                    //     editable:false,
+                    // }
+                    ],
                 //选择框
                 multipleSelection: [],
                 //禁止状态，确保只有一个编辑按钮可点，当一个编辑按钮点亮后，其他编辑不可点
@@ -240,33 +161,45 @@
                 addId:111,
                 //信息表单
                 validateForm: {
-                    age: "",
-                    name:""
+                    bankname:'',
+                    cardNum:''
                 },
                 //表单显示状态
                 visible:false
             };
         },
+       // created() {},
+
         methods: {
             //人员单个删除
             handleDelete(index, row) {
-                //获取要删除的id，row是element-ui封装好的点击的时候能获取你点击那一行的信息
-                var delId = row.id
-                this.$confirm("此操作将永久删除该文件, 是否继续?", "警告", {
+                this.$confirm("确定删除该银行卡信息?", "警告", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
                 }).then(() => {
-                    //遍历表格，筛选掉表格中符合要删除的id，而不符合的返回给table，达到删除的目的
-                    this.tableData = this.tableData.filter(ele =>
-                        ele["id"] != delId //或者可以写成ele.id != delId
-                    )
-                    //需要将最新的表格数据传递给备份记录，这一步操作是解决搜索完东西后，表格的还原
-                    this.originalData = JSON.parse(JSON.stringify(this.tableData))
-                    this.$message({
-                        type: "success",
-                        message: "删除成功!",
+                    console.log(row);
+                    axios.post('/bank-card/delete',{
+                        order:row.orders
                     })
+                        .then(res => {
+                            console.log(res.data);
+                          //  let datas=res.data.data;
+                            if (res.data.code===0){
+                                this.$message({
+                                    type: "success",
+                                    message: "删除成功!",
+                                })
+                                this.getList();
+                            }else{
+                                let msg=res.data.message;
+                                this.$message.error( msg);
+                            }
+                        })
+                        .catch(error=>{
+                            console.error(error);
+                        });
+
                 })
                     .catch(() => {
                         this.$message({
@@ -318,51 +251,6 @@
                     });
             },
 
-            //搜索函数，该函数能在前一个搜索的基础上进行二次搜索，可以自定义多个搜索，在此函数的基础上添加即可
-            searchCommon() {
-                this.forbid = false
-                this.tableData = JSON.parse(JSON.stringify(this.originalData))
-                //搜索出的数据
-                var searchList = []
-                for(var key in this.searchInput){
-                    /*这里有一点需要主要的是，this.tableDate内每一个对象的id健值还有name健值
-                    跟输入框的this.searchInput内的age和name同名 所有才可以直接用for(var key in this.searchInput)中的key否则不可以*/
-                    if(this.searchInput[key] != ""){ //遍历所有搜索框，如果某一项搜索框为空，直接跳过这个搜索框
-                        searchList = this.tableData.filter(ele=>  {
-                            ele.editable = false
-                            // 忽略大小写匹配ele[key].toLowerCase().indexOf(this.searchInput[key].toLowerCase() != -1)，
-                            // 但是对于数字而言没有任何效果，toLowerCase()只支持字符串  不支持数字类型 如果想匹配数字的话可以将数字变成字符串的数字 例如 1 => '1'
-                            // 此外indexOf() 也是来匹配字符串而非其他类型，否则报错
-                            return  ele[key].toLowerCase().indexOf(this.searchInput[key].toLowerCase()) >-1  //注意这里的xxx.indexOf(xxx) >-1,而不是xxx.indexOf(xx >-1) 不要括错位置了，否则出问题
-                        })
-                    }
-                    else{
-                        /* 这一步其实也并不完善，如果遇到了四个搜入框，1.3输入框内容为空，2.4输入框有内容，
-                        那么会导致当遇到第三个输入框为空的情况下，将第二次输入框筛选出的东西给还原成数据表格元素模样
-                        所以可以多选择添加一个表格，来记录被搜索框搜索出的东西，如果这么提示还不能理解的话，到时候我写出来
-                        或者做一层判断只有searchList不为空才进行第368行否则不进行，就可以解决完上面说的问题*/
-                        searchList =JSON.parse(JSON.stringify(this.tableData))
-                    }
-                    //将第一次过滤出的信息保留，留着下一次搜索框内容过滤，直到搜索框没有内容
-                    this.tableData = JSON.parse(JSON.stringify(searchList))
-                }
-                //搜索框内容都为空那么allEmpty = true
-                var allEmpty = true
-                for(let key in this.searchInput){
-                    if(this.searchInput[key]!==''){
-                        //如果任意输入框存在一个为空的内容，那么allEmpty = false
-                        allEmpty = false
-                    }
-                }
-                //搜索内容都为空，通过备份的数据表格还原表格数据
-                if(allEmpty){
-                    this.tableData = JSON.parse(JSON.stringify(this.originalData))
-                    this.tableData.forEach(e=>{
-                        e.editable  = false
-                    })
-                    return this.tableData
-                }
-            },
             /*编辑函数 */
             handleEdit(index, row) {
                 console.log(row)
@@ -420,18 +308,41 @@
 
             //添加人员
             submitForm(formName) {
-                this.visible = true
+                this.visible = true;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.addId +=1
-                        this.validateForm.id = this.addId,
-                            this.validateForm.editable = false,
-                            this.tableData.push(JSON.parse(JSON.stringify(this.validateForm)))
-                        //添加完人员，将最新表格数据记录一份
-                        this.originalData = JSON.parse(JSON.stringify(this.tableData))
-                        //每次添加完后都重置一下表单
-                        this.$refs[formName].resetFields();
-                        this.visible = false
+                        axios.post('/bank-card/add-bankcard',{
+                            bank_card:this.validateForm.cardNum,
+                            bank_name:this.validateForm.bankname
+                        })
+                            .then(res => {
+                                console.log(res.data);
+                                if (res.data.code===0){
+                                    this.$message.success('添加银行卡成功！');
+                                    this.addId +=1;
+                                    this.validateForm.id = this.addId;
+                                    this.validateForm.editable = false;
+                                    let item={
+                                        cardNum:this.validateForm.cardNum,
+                                        bankName:this.validateForm.bankname,
+                                        amount:1000,
+                                        orders:this.tableData.length+1
+                                    };
+                                    this.tableData.push(JSON.parse(JSON.stringify(item)));
+                                    //添加完人员，将最新表格数据记录一份
+                                    this.originalData = JSON.parse(JSON.stringify(this.tableData));
+                                    //每次添加完后都重置一下表单
+                                    this.$refs[formName].resetFields();
+                                    this.visible = false
+
+                                }else{
+                                    let msg=res.data.message;
+                                    this.$message.error(msg);
+                                }
+                            })
+                            .catch(error=>{
+                                console.error(error);
+                            });
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -456,9 +367,26 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
+            getList(){
+                axios.post('/bank-card/get-card-list')
+                    .then(res => {
+                        console.log(res.data);
+                        let datas=res.data.data;
+                        if (res.data.code===0){
+                            this.tableData=datas.bankCardList;
+                        }else{
+                            let msg=res.data.message;
+                            this.$message.error( msg);
+                        }
+                    })
+                    .catch(error=>{
+                        console.error(error);
+                    });
+                this.originalData = JSON.parse(JSON.stringify(this.tableData))
+            }
         },
         mounted() {
-            this.originalData = JSON.parse(JSON.stringify(this.tableData))
+          this.getList();
         },
     }
 </script>
@@ -501,5 +429,9 @@
         margin: 10px 0 0 30px;
         border: 1px solid #1f808c;
 
+    }
+    .userTitle{
+        text-align: center;
+        color:#112f50;
     }
 </style>

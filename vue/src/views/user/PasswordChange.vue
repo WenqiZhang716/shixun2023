@@ -8,7 +8,7 @@
                         label="原密码"
                         prop="oldPassword"
                         :rules="[ { required: true, message: '请输入原密码', trigger: 'blur' } ]">
-                    <el-input type="password" v-model="user.password" show-password></el-input>
+                    <el-input type="password" v-model="user.oldPassword" show-password></el-input>
                 </el-form-item>
                 <el-form-item
                         label="新密码"
@@ -25,7 +25,7 @@
                 </el-form-item>
                 <!--按钮-->
                 <el-form-item class="button">
-                    <el-button  type="warning" @click="signIn"
+                    <el-button  type="warning" @click="changePass()"
                                :disabled="user.password===''||user.checkPassword===''" round>确认修改
                     </el-button>
                     <el-button @click="resetForm" round>重置</el-button>
@@ -36,14 +36,14 @@
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: "PasswordChange",
         data() {
             return {
-                labelPosition: 'login',  // 开始先定位到登录
                 // 用户数据
                 user: {
-                    name: '',
                     password: '',
                     checkPassword: '',
                     oldPassword:''
@@ -51,19 +51,36 @@
             }
         },
         methods: {
-            // 登录
-            login() {
-                this.$router.push("/home")
-
-            },
-            // 注册
-            signIn() {
+            // 修改密码
+            changePass() {
                 if (this.user.checkPassword !== this.user.password) {
                     this.$message.error("两次密码不一致！")
-                }
-                if (this.user.oldPassword === this.user.password) {
+                }else if (this.user.oldPassword === this.user.password) {
                     this.$message.error("新密码不能与旧密码一样！")
+                }else{
+                    axios.post('/user/change-pw',{
+                        "password":this.user.oldPassword,
+                        "new-password":this.user.password
+                    })
+                        .then(res => {
+                            console.log(res.data);
+                            if (res.data.code===0){
+                                this.$message.success('修改密码成功！');
+                                this.$message.warning( '请重新登录！');
+                                localStorage.removeItem('token');
+                                localStorage.removeItem('username');
+                                localStorage.removeItem('id');
+                                this.$router.push("/")
+                            }else{
+                                let msg=res.data.message;
+                                this.$message.error( msg);
+                            }
+                        })
+                        .catch(error=>{
+                            console.error(error);
+                        });
                 }
+
             },
             // 重置表单
             resetForm() {

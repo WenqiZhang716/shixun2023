@@ -11,6 +11,7 @@ import BillCreate from "../views/bill/BillCreate"
 import BillMange from "../views/bill/BillManage"
 import Transport from "../views/transport/transportManifest"
 import ChangePW from "../views/user/PasswordChange"
+import BillAndManifest from "../views/bill/billAndManifest"
 
 Vue.use(VueRouter)
 
@@ -63,6 +64,11 @@ const routes = [
         component:BillMange
       },
       {
+        path:"/bill/billAndMani",
+        name:"BillAndMani",
+        component:BillAndManifest
+      },
+      {
         path:"/transport/transport-plan",
         name:"transportPlan",
         component:Transport
@@ -80,6 +86,22 @@ const router = new VueRouter({
   mode:'history',
   base:process.env.BASE_URL,
   routes
-})
+});
+
+//路由筛选
+router.beforeEach((to, from, next) => {
+  let token = localStorage.getItem("token");
+  if (token) {
+    next();
+  } else {
+    if (to.fullPath == "/") {
+      next();
+    } else {
+      window.alert("请先登录！");
+      next("/");
+    }
+  }
+});
+
 
 export default router

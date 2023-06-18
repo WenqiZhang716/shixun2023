@@ -10,11 +10,13 @@
                     class="el-menu-vertical-demo"
                     background-color="#112f50"
                     text-color="#fff" active-text-color="#ffd04b"
+                    unique-opened="true"
                     router>
-                <el-menu-item index="/home">
+                <el-menu-item index="/home" v-if="isUser">
                     <i class="el-icon-menu"></i>
                     <span slot="title" class="fontSize">首页</span>
                 </el-menu-item>
+
                 <el-submenu index="2">
                     <template slot="title" >
                         <i class="el-icon-s-tools"></i>
@@ -46,21 +48,21 @@
                         <span class="fontSize">账单管理</span>
                     </template>
                     <el-menu-item-group >
+<!--                        <el-menu-item index="/bill/billAndMani">账单创建</el-menu-item>-->
                         <el-menu-item index="/bill/manage">账单操作</el-menu-item>
                     </el-menu-item-group>
 
                 </el-submenu>
 
-                <el-submenu index="5">
-                    <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span class="fontSize">运输管理</span>
-                    </template>
-                    <el-menu-item-group >
-                        <el-menu-item index="/transport/transport-plan">运输查询</el-menu-item>
-                    </el-menu-item-group>
-
-                </el-submenu>
+<!--                <el-submenu index="5">-->
+<!--                    <template slot="title">-->
+<!--                        <i class="el-icon-location"></i>-->
+<!--                        <span class="fontSize">运输管理</span>-->
+<!--                    </template>-->
+<!--                    <el-menu-item-group >-->
+<!--                        <el-menu-item index="/transport/transport-plan">运输查询</el-menu-item>-->
+<!--                    </el-menu-item-group>-->
+<!--                </el-submenu>-->
 
             </el-menu>
     </div>
@@ -68,7 +70,12 @@
 
 <script>
     export default {
-        name: "IndexMenu"
+        name: "IndexMenu",
+        data() {
+            return {
+                isUser: true,
+            }
+        }
     }
 </script>
 
