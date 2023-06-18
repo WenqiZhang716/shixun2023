@@ -152,8 +152,8 @@ public class BillServiceImpl implements IBillService {
             map.put("id", b.getId());
             map.put("manifestId", b.getManifestId());
             map.put( "payoff", b.getPayoff());
-             map.put( "amount", b.getAmount());
-             map.put( "payment", b.getPayment());
+             map.put( "amount", String.format("%.2f",b.getAmount()));
+             map.put( "payment", String.format("%.2f",b.getPayment()));
              map.put( "bankCardId", b.getBankCardId());
              map.put( "status", zt);
              map.put( "payWay", b.getPayWay()==0?"先付后到":"先到后付");

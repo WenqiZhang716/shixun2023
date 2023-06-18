@@ -46,7 +46,7 @@ public class TransportTimeTaskService {
     }
 
     @Async
-    @Scheduled(initialDelay = 15000,fixedDelay = 10000) //定时任务在方法上的注解
+    @Scheduled(initialDelay = 15000,fixedDelay = 30000) //定时任务在方法上的注解
     public void timedChange1To2(){
         Optional<Transport> transport = transportRepository.findFirstByStatusAndIsValid(1,1);
         if(transport.isPresent()){

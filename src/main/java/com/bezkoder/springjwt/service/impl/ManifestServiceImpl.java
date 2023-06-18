@@ -223,7 +223,7 @@ public class ManifestServiceImpl implements IManifestService {
                 map.put("endAddress", manifest.getEndAddress());
                 map.put("endId", manifest.getEndId());
                 map.put("payType", manifest.getPayType()==0?"先付后到":"先到后付");
-                map.put("amount", manifest.getAmount());
+                map.put("amount", String.format("%.2f",manifest.getAmount()));
                 map.put("receiverPhone", manifest.getReceiverPhone());
                 map.put("receiverName", manifest.getReceiverName());
                 map.put("beizhu", manifest.getBeizhu());
@@ -256,8 +256,8 @@ public class ManifestServiceImpl implements IManifestService {
                     map2.put("id", b.getId());
                     map2.put("manifestId", b.getManifestId());
                     map2.put( "payoff", b.getPayoff());
-                    map2.put( "amount", b.getAmount());
-                    map2.put( "payment", b.getPayment());
+                    map2.put( "amount", String.format("%.2f",b.getAmount()));
+                    map2.put( "payment", String.format("%.2f",b.getPayment()));
                     map2.put( "bankCardId", b.getBankCardId());
                     map2.put( "status", zt2);
                     map2.put( "payWay", b.getPayWay()==0?"先付后到":"先到后付");
