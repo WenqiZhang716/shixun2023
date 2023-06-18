@@ -146,6 +146,18 @@ public class ManifestController {
         }
     }
 
+    @PostMapping("/get-home-data")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?>getHomeData(@RequestHeader("Authorization") String tokenBearer){
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdFromJwtToken(token);
+        Map<String,Object>map=manifestService.getHomeData(userId);
+        if(map!=null){
+            return ResponseEntity.ok(new DataResponse(0,map));
+        }else{
+            return ResponseEntity.ok(new MessageResponse(1, "获取首页数据失败!"));
+        }
+    }
 
 
 

@@ -99,11 +99,11 @@ public class ManifestServiceImpl implements IManifestService {
         }else if(status==-1){
             list= (ArrayList<Manifest>) manifestRepository.findAllByUserId(userId);
         }else if(status==4){
-            list=(ArrayList<Manifest>)manifestRepository.findAllByStatusAndIsPayAndPayType(0,0,0);
+            list=(ArrayList<Manifest>)manifestRepository.findAllByStatusAndIsPayAndPayTypeAndUserId(0,0,0,userId);
         }else if(status==5){
-            list=(ArrayList<Manifest>)manifestRepository.findAllByIsPayAndPayType(1,0);
+            list=(ArrayList<Manifest>)manifestRepository.findAllByIsPayAndPayTypeAndUserId(1,0,userId);
         }else{
-            list=(ArrayList<Manifest>)manifestRepository.findAllByPayType(1);
+            list=(ArrayList<Manifest>)manifestRepository.findAllByPayTypeAndUserId(1,userId);
         }
         List<Object>list2=new ArrayList<>();
         for(Manifest manifest:list){
@@ -279,6 +279,20 @@ public class ManifestServiceImpl implements IManifestService {
             }
         }
         return null;
+    }
+
+    @Override
+    public Map<String, Object> getHomeData(Long userId) {
+        List<Manifest>list1=manifestRepository.findAllByUserId(userId);
+        List<Manifest>list2=manifestRepository.findAllByIsPayAndPayTypeAndUserId(0,0,userId);
+        List<Manifest>list3=manifestRepository.findAllByStatusAndUserId(1,userId);
+        List<Manifest>list4=manifestRepository.findAllByStatusAndUserId(2,userId);
+        Map<String,Object> map=new HashMap<>();
+        map.put("value1",list1.size());
+        map.put("value2",list2.size());
+        map.put("value3",list3.size());
+        map.put("value4",list4.size());
+        return map;
     }
 
 }

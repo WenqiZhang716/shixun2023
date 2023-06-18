@@ -18,6 +18,7 @@ public interface IManifestService {
     int changeAddress(int manifestId,String newAddress);
     List<Object> findAllManifestByStatus(int status,Long userId);
     Map<String,Object> getOneDetail(int id, Long userId);
+    Map<String,Object>getHomeData(Long userId);
 
 }
 

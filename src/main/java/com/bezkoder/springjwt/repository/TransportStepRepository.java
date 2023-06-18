@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author zhangwq
@@ -21,5 +22,9 @@ public interface TransportStepRepository extends JpaRepository<TransportStep, Lo
     List<TransportStep> findListByProvinces(@Param("province")String provinces);
 
     List<TransportStep>findAllByProvincesLike(String provinces);
+
+    List<TransportStep>findAllByType(int type);
+    List<TransportStep>findAllByTypeAndProvinces(int type,String provinces);
+    Optional<TransportStep> findOneById(int id);
 
 }

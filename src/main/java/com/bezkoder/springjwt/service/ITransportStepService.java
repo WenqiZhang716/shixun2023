@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface ITransportStepService {
     List<TransportStep> getStepIdByString(String address);
+    List<Object>getBigStepList();
+    List<Object>getSmallList(int id);
 }

@@ -174,4 +174,35 @@ public class TransportController {
 //
 //    }
 
+    @PostMapping("/big-step-list")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?> getBigStep(@RequestHeader("Authorization") String tokenBearer){
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdByJwtToken(token);
+        try{
+            HashMap<String, Object> map=new HashMap<>();
+            return ResponseEntity.ok(new DataResponse(0,map));
+        }catch(Exception e){
+            return ResponseEntity.ok(new MessageResponse(1, "获取省/市列表失败！"));
+        }
+
+    }
+
+    @PostMapping("/small-step-list")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?> getSmallStep(@RequestHeader("Authorization") String tokenBearer){
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=jwtUtils.getUserIdByJwtToken(token);
+        try{
+            HashMap<String, Object> map=new HashMap<>();
+            return ResponseEntity.ok(new DataResponse(0,map));
+        }catch(Exception e){
+            return ResponseEntity.ok(new MessageResponse(1, "获取省/市列表失败！"));
+        }
+
+    }
+
+
+
+
 }
