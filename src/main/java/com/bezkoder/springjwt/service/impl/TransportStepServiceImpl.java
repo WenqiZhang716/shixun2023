@@ -33,6 +33,10 @@ public class TransportStepServiceImpl implements ITransportStepService {
     public List<Object> getBigStepList() {
         List<TransportStep>list=transportStepRepository.findAllByType(1);
         List<Object>list2=new ArrayList<>();
+        Map<String,Object> map2=new HashMap<>();
+        map2.put("value",-1);
+        map2.put("label","请选择");
+        list2.add(map2);
         for(TransportStep s:list){
             Map<String,Object> map=new HashMap<>();
             map.put("value",s.getId());
@@ -49,6 +53,11 @@ public class TransportStepServiceImpl implements ITransportStepService {
         if(transportStep.isPresent()){
             TransportStep step=transportStep.get();
             List<TransportStep>list=transportStepRepository.findAllByTypeAndProvinces(2,step.getName());
+            Map<String,Object> map2=new HashMap<>();
+            map2.put("value",-1);
+            map2.put("label","请选择");
+            list2.add(map2);
+
             if(list.isEmpty()){
                 Map<String,Object> map=new HashMap<>();
                 map.put("value",step.getId());

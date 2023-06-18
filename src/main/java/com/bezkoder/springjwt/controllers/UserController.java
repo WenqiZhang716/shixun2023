@@ -1,5 +1,6 @@
 package com.bezkoder.springjwt.controllers;
 
+import com.bezkoder.springjwt.models.BankCard;
 import com.bezkoder.springjwt.models.Role;
 import com.bezkoder.springjwt.models.User;
 import com.bezkoder.springjwt.payload.response.DataResponse;
@@ -9,7 +10,9 @@ import com.bezkoder.springjwt.payload.response.MessageResponse;
 import com.bezkoder.springjwt.repository.UserRepository;
 import com.bezkoder.springjwt.security.jwt.JwtUtils;
 import com.bezkoder.springjwt.security.services.UserDetailsImpl;
+import com.bezkoder.springjwt.service.IBankCardService;
 import com.bezkoder.springjwt.service.IUserService;
+import com.bezkoder.springjwt.service.impl.BankCardServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,6 +41,9 @@ public class UserController {
 	UserRepository userRepository;
 	@Autowired
 	IUserService userService;
+
+	@Autowired
+	IBankCardService bankCardService;
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -128,6 +134,29 @@ public class UserController {
 		}
 
 	}
+
+	@PostMapping("/userCheck")
+	@PreAuthorize("hasRole('USER') ")
+	public ResponseEntity<?>userCheck(@RequestHeader("Authorization") String tokenBearer){
+		String token=tokenBearer.substring(7, tokenBearer.length());
+		String username=jwtUtils.getUserNameFromJwtToken(token);
+		Optional<User> IsUser=userRepository.findByUsername(username);
+		HashMap<String,Object>map=new HashMap<String,Object>();
+		if(IsUser.isPresent()){
+			List<Object>bank=bankCardService.getList(IsUser.get().getId());
+			if(IsUser.get().getIsCheck()==0){
+				return ResponseEntity.ok(new MessageResponse(1, "请先进行实名认证！"));
+			}
+			if(bank.size()==0){
+				return ResponseEntity.ok(new MessageResponse(2, "请至少添加一张银行卡！"));
+			}
+			return ResponseEntity.ok(new DataResponse(0,map));
+		}else {
+			return ResponseEntity.ok(new MessageResponse(1, "用户不存在!"));
+		}
+
+	}
+
 
 	/**
 	 *

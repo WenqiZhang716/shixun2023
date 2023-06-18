@@ -103,11 +103,13 @@ public class TransportServiceImpl implements ITransportService {
     }
 
     @Override
-    public List<Object> getStepInfo(int manifestId) {
+    public Map<String, Object> getStepInfo(int manifestId) {
         List<Transport>list=getPathList(manifestId);
         List<Object> list2=new ArrayList<>();
-
+        int flag=0;
+        int i=0;
         for(Transport t:list){
+            i++;
             Map<String,Object>map=new HashMap<>();
             map.put("title",t.getOrders()+":"+t.getStep());
             String des="";
@@ -120,11 +122,15 @@ public class TransportServiceImpl implements ITransportService {
                 if(!(t.getOrders()>1&&t.getStepId()==0)){
                     des=des+"\n"+"离开时间 :"+t.getLeaveTime();
                 }
+                flag=i;
             }
             map.put("desc",des);
             list2.add(map);
-
         }
-        return list2;
+        HashMap<String, Object> mapp=new HashMap<>();
+        mapp.put("path",list2);
+        mapp.put("status",flag);
+
+        return mapp;
     }
 }

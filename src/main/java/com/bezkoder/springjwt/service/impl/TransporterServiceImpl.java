@@ -112,7 +112,6 @@ public class TransporterServiceImpl implements ITransporterService {
                         int a=transportRepository.updateArriveTimeAndStatusAndTransporterIdById(transport.getId(),new Date(),1,transporterId);
                     }
                 }
-                //(开启定时服务)如果能实现
             }else if(mani.getStatus()==3){
                 //将状态改为2，记录运送人与时间，账单支付状态修改（如果是先到后付）
                 if(mani.getPayType()==1){
@@ -145,9 +144,4 @@ public class TransporterServiceImpl implements ITransporterService {
         return -1;
     }
 
-    @Override
-    public int beginTimetask(int a) {
-        System.out.println("开始启动timeTask a");
-        return 0;
-    }
 }

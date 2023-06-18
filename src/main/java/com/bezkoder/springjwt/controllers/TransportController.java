@@ -91,10 +91,7 @@ public class TransportController {
         Long userId=jwtUtils.getUserIdByJwtToken(token);
         int manifestId= Integer.parseInt(params.get("manifest_id"));
         try{
-            List<Object>list=transportService.getStepInfo(manifestId);
-            HashMap<String, Object> map=new HashMap<>();
-            map.put("path",list);
-            return ResponseEntity.ok(new DataResponse(0,map));
+            return ResponseEntity.ok(new DataResponse(0,transportService.getStepInfo(manifestId)));
         }catch(Exception e){
             return ResponseEntity.ok(new MessageResponse(1, "获取列表失败"));
         }
@@ -165,14 +162,6 @@ public class TransportController {
         }
     }
 
-//    //根据条件查询所负责订单
-//    @PostMapping("/test2")
-//    public ResponseEntity<?> test2(){
-//        int a=0;
-//            transporterService.beginTimetask(a);
-//            return ResponseEntity.ok(new MessageResponse(1, "测试测试"));
-//
-//    }
 
     @PostMapping("/big-step-list")
     @PreAuthorize("hasRole('USER') ")
@@ -181,6 +170,8 @@ public class TransportController {
         Long userId=jwtUtils.getUserIdByJwtToken(token);
         try{
             HashMap<String, Object> map=new HashMap<>();
+            List<Object>list=transportStepService.getBigStepList();
+            map.put("info",list);
             return ResponseEntity.ok(new DataResponse(0,map));
         }catch(Exception e){
             return ResponseEntity.ok(new MessageResponse(1, "获取省/市列表失败！"));
@@ -190,14 +181,20 @@ public class TransportController {
 
     @PostMapping("/small-step-list")
     @PreAuthorize("hasRole('USER') ")
-    public ResponseEntity<?> getSmallStep(@RequestHeader("Authorization") String tokenBearer){
+    public ResponseEntity<?> getSmallStep(@RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
+        int id= Integer.parseInt(params.get("id"));
         String token=tokenBearer.substring(7, tokenBearer.length());
         Long userId=jwtUtils.getUserIdByJwtToken(token);
         try{
+            if(id==-1){
+                return ResponseEntity.ok(new MessageResponse(1, "请先选择省/直辖市！"));
+            }
             HashMap<String, Object> map=new HashMap<>();
+            List<Object>list=transportStepService.getSmallList(id);
+            map.put("id",list);
             return ResponseEntity.ok(new DataResponse(0,map));
         }catch(Exception e){
-            return ResponseEntity.ok(new MessageResponse(1, "获取省/市列表失败！"));
+            return ResponseEntity.ok(new MessageResponse(1, "获取省/直辖市列表失败！"));
         }
 
     }
