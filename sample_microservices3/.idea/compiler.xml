@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="cart_service" />
+        <module name="user_service" />
+        <module name="auth_service" />
+        <module name="bank_service" />
+        <module name="trans_service" />
+        <module name="product_service" />
+        <module name="registry_service" />
+        <module name="gateway_service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="event_pipe" target="17" />
+      <module name="test_module" target="17" />
+      <module name="test_service" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="auth_service" options="-parameters" />
+      <module name="bank_service" options="-parameters" />
+      <module name="cart_service" options="-parameters" />
+      <module name="event_pipe" options="-parameters" />
+      <module name="gateway_service" options="-parameters" />
+      <module name="product_service" options="-parameters" />
+      <module name="registry_service" options="-parameters" />
+      <module name="test_service" options="-parameters" />
+      <module name="trans_service" options="-parameters" />
+      <module name="user_service" options="-parameters" />
+    </option>
+  </component>
+</project>
