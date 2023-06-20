@@ -4,6 +4,8 @@
 
 同时在仓库里上传了html版，ShiXun.html
 
+master是第三次作业的版本，前端在vue文件夹里
 
-前端在vue文件夹里
-后端在microservice3里
+微服务在SpringCloud分支
+前端在vue里，后端在example-microservice3里
+文档待完成。。。
