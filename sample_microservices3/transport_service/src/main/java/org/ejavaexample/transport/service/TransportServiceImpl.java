@@ -24,47 +24,6 @@ public class TransportServiceImpl{
     TransportStepServiceImpl transportStepService;
 
 
-//    public List<Transport> pathPlan(int manifestId) {
-//        Optional<Manifest> manifest = manifestRepository.findById(manifestId);
-//        List<TransportStep>list=new ArrayList<>();
-//        if(manifest.isPresent()){
-//            Manifest mani=manifest.get();
-//            String beginA=mani.getBeginAddress();
-//            String endA=mani.getEndAddress();
-//            List<TransportStep> beginList =transportStepService.getStepIdByString(beginA);
-//            List<TransportStep>endList=transportStepService.getStepIdByString(endA);
-//            int len1=beginList.size();
-//            int len2=endList.size();
-//            for(int i=len1-1;i>=0;i--){
-//                list.add(beginList.get(i));
-//            }
-//            for (TransportStep transportStep : endList) {
-//                if (list.contains(transportStep)) {
-//                    list.remove(transportStep);
-//                } else {
-//                    list.add(transportStep);
-//                }
-//            }
-//            CreateOne(mani.getId(),mani.getBeginAddress(),0,0,1,1);
-//            int o=1;
-//            for (TransportStep transportStep : list) {
-//                o++;
-//               CreateOne(mani.getId(),transportStep.getName()+"中转站",transportStep.getId(),0,0,o);
-//            }
-//            CreateOne(mani.getId(),mani.getEndAddress(),0,0,1,++o);
-//            //先付后到，默认直接进入定时刷新状态
-//            if(mani.getPayType()==1){
-//                transportRepository.updateValidByManifestId(mani.getId());
-//            }
-//        }
-//        List<Transport>tList=getPathList(manifestId);
-//        int beginId=tList.get(1).getStepId();
-//        int endId=tList.get(tList.size()-2).getStepId();
-//        manifestRepository.updateBeginAndEndId(manifestId,beginId,endId);
-//
-//
-//        return tList;
-//    }
 
 
     public int CreateOne(int manifestId, String step,int stepId, int transporterId, int type,int orders) {

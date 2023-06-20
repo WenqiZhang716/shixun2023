@@ -32,27 +32,24 @@ spring:
           predicates:
             - Path=/trans/**
           filters:
-#            - AddResponseHeader=my-response-header,product.ejavaexample.org
             - PrefixPath=/api
-
-#        - id: USER-SERVICE
-#          uri: lb://USER-SERVICE
-#          predicates:
-#            - Path=/user/**
-#          filters:
-##            - AddResponseHeader=my-response-header,user.ejavaexample.org
-#            - PrefixPath=/api
-##            - MyPreFilter
 
         - id: AUTH-SERVICE
           uri: lb://AUTH-SERVICE
           predicates:
             - Path=/auth/**
           filters:
-#            - AddResponseHeader=my-response-header,auth.ejavaexample.org
-            - PrefixPath=/api 
+            - PrefixPath=/api
 
-            
+
+        - id: TRANSPORT-SERVICE
+          uri: lb://TRANSPORT-SERVICE
+          predicates:
+            - Path=/transport/**
+          filters:
+            - PrefixPath=/api
+
+
 
 
 server:

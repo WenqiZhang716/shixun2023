@@ -7,11 +7,15 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
+@EnableAsync
+@EnableScheduling
 @EnableJpaRepositories(basePackages= "org.ejavaexample.transport.repository")
 public class TransportServiceApplication {
 

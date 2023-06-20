@@ -1,7 +1,9 @@
 package org.ejavaexample.bank.controller;
 
+import org.ejavaexample.bank.entity.BankCard;
 import org.ejavaexample.bank.payload.response.DataResponse;
 import org.ejavaexample.bank.payload.response.MessageResponse;
+import org.ejavaexample.bank.repository.BankCardRepository;
 import org.ejavaexample.bank.service.BankCardServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author zhangwq
@@ -24,6 +27,9 @@ public class BankCardController {
 
     @Autowired
     BankCardServiceImpl bankCardService;
+
+    @Autowired
+    BankCardRepository bankCardRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -115,5 +121,29 @@ public class BankCardController {
         }
 
     }
+
+    @GetMapping("/payOne/{userId}&&{order}&&{amount}&&{password}")
+    public int PayOneCard(@PathVariable("userId") Long userId,@PathVariable("order") int order,
+                                        @PathVariable("amount") double amount,@PathVariable("password") String password){
+        Optional<BankCard> bank=bankCardRepository.findByUserIdAndOrders(userId,order);
+        if(bank.isPresent()){
+            BankCard card=bank.get();
+            if(!card.getPassword().equals(password)){
+                return -2;
+            }
+            int cardId=card.getId();
+            if(card.getAmount()<amount){
+                return -5;
+            }
+            bankCardRepository.updateAmount(cardId,card.getAmount()-amount);
+            return cardId;
+        }else{
+            return -1;
+        }
+
+
+    }
+
+
 
 }

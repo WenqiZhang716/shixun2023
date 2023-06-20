@@ -1,13 +1,11 @@
 package org.ejavaexample.manifest.controller;
 
-import com.bezkoder.springjwt.payload.request.CreateManiRequest;
-import com.bezkoder.springjwt.payload.response.DataResponse;
-import com.bezkoder.springjwt.payload.response.MessageResponse;
-import com.bezkoder.springjwt.repository.UserRepository;
-import com.bezkoder.springjwt.security.jwt.JwtUtils;
-import com.bezkoder.springjwt.service.IGoodsTypeService;
-import com.bezkoder.springjwt.service.IManifestService;
 import jakarta.validation.Valid;
+import org.ejavaexample.manifest.entity.Manifest;
+import org.ejavaexample.manifest.payload.request.CreateManiRequest;
+import org.ejavaexample.manifest.payload.response.DataResponse;
+import org.ejavaexample.manifest.payload.response.MessageResponse;
+import org.ejavaexample.manifest.repository.ManifestRepository;
 import org.ejavaexample.manifest.service.GoodsTypeServiceImpl;
 import org.ejavaexample.manifest.service.ManifestServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +17,11 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("api/mani")
+@RequestMapping("api/mani/manifest")
 public class ManifestController {
 
     @Autowired
@@ -33,6 +32,9 @@ public class ManifestController {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    ManifestRepository manifestRepository;
 
 
     @PostMapping("/create")
@@ -125,21 +127,21 @@ public class ManifestController {
     }
 
 
-//    @PostMapping("/get-one-detail")
-//    @PreAuthorize("hasRole('USER') ")
-//    public ResponseEntity<?>getOneDetail( @RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
-//        int manifestId = Integer.parseInt(params.get("id"));
-//        String token=tokenBearer.substring(7, tokenBearer.length());
-//        Long userId=restTemplate.getForObject("http://AUTH-SERVICE:8001/api/auth/getUserId/"+token,Long.class);
-////        Map<String,Object> map=manifestService.getOneDetail(manifestId,userId);
-//        if(map!=null){
-//            Map<String,Object> map2=new HashMap<>();
-//            map2.put("info",map);
-//            return ResponseEntity.ok(new DataResponse(0,map2));
-//        }else{
-//            return ResponseEntity.ok(new MessageResponse(1, "获取货物种类失败!"));
-//        }
-//    }
+    @PostMapping("/get-one-detail")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?>getOneDetail( @RequestBody Map<String, String> params,@RequestHeader("Authorization") String tokenBearer){
+        int manifestId = Integer.parseInt(params.get("id"));
+        String token=tokenBearer.substring(7, tokenBearer.length());
+        Long userId=restTemplate.getForObject("http://AUTH-SERVICE:8001/api/auth/getUserId/"+token,Long.class);
+        Map<String,Object> map=manifestService.getOneDetail(manifestId,userId);
+        if(map!=null){
+            Map<String,Object> map2=new HashMap<>();
+            map2.put("info",map);
+            return ResponseEntity.ok(new DataResponse(0,map2));
+        }else{
+            return ResponseEntity.ok(new MessageResponse(1, "获取货物种类失败!"));
+        }
+    }
 
     @PostMapping("/get-home-data")
     @PreAuthorize("hasRole('USER') ")
@@ -152,6 +154,57 @@ public class ManifestController {
         }else{
             return ResponseEntity.ok(new MessageResponse(1, "获取首页数据失败!"));
         }
+    }
+
+
+    @GetMapping("/update-begin-and-end-id/{manifestId}&&{beginId}&&{endId}")
+    public int updateBeginAndEndId(@PathVariable("manifestId")int manifestId,@PathVariable("beginId")int beginId,@PathVariable("endId")int endId){
+      int a=manifestRepository.updateBeginAndEndId(manifestId, beginId, endId);
+      return a;
+    }
+
+    @GetMapping("/get-begin-and-end-address/{id}")
+    public Map<String,Object>getBeginAndEndAddress(@PathVariable("id") int id){
+        Optional<Manifest> manifest = manifestRepository.findById(id);
+        Map<String,Object>map=new HashMap<>();
+        if(manifest.isPresent()){
+            map.put("begin",manifest.get().getBeginAddress());
+            map.put("end",manifest.get().getEndAddress());
+            map.put("payType",manifest.get().getPayType());
+        }
+        return map;
+    }
+
+    @GetMapping("/finish-manifest/{id}")
+    public int finishManifest(@PathVariable("id")int id){
+        Optional<Manifest>mani=manifestRepository.findById(id);
+        if(mani.isPresent()){
+            Manifest manifest = mani.get();
+            if(manifest.getStatus()==1){
+                manifestRepository.updateStatusByManiId(manifest.getId(),2);
+                manifestRepository.updateIsPay(manifest.getId());
+                System.out.println("完成一条订单");
+            }
+         return 1;
+        }
+        return 0;
+    }
+
+    @GetMapping("/change-one-manifest/{id}")
+    public int changeOneManifest(@PathVariable("id")int id){
+        Optional<Manifest>mani=manifestRepository.findById(id);
+        if(mani.isPresent()){
+            Manifest manifest = mani.get();
+            //修改成进行中
+            if(manifest.getStatus()==0){
+                manifestRepository.updateStatusByManiId(manifest.getId(),1);
+                System.out.println("将一条订单状态修改为进行中");
+            }
+            return 1;
+        }else{
+            return 0;
+        }
+
     }
 
 

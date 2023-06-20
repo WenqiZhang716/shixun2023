@@ -4,6 +4,8 @@ package org.ejavaexample.manifest.controller;
 import org.ejavaexample.manifest.entity.Bill;
 import org.ejavaexample.manifest.payload.response.DataResponse;
 import org.ejavaexample.manifest.payload.response.MessageResponse;
+import org.ejavaexample.manifest.repository.BillRepository;
+import org.ejavaexample.manifest.repository.ManifestRepository;
 import org.ejavaexample.manifest.service.BillServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,20 +13,24 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zhangwq
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/bill")
+@RequestMapping("/api/mani/bill")
 public class BillController {
 
     @Autowired
     BillServiceImpl billService;
+
+    @Autowired
+    BillRepository billRepository;
+
+    @Autowired
+    ManifestRepository manifestRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -78,23 +84,34 @@ public class BillController {
         String password=params.get("password");
 
         try{
-            //需要和bankcard模块调
-           // int flag=billService.payOne(userId,billId,orders,password);
-            int flag=0;
-            if(flag==2){
-                return ResponseEntity.ok(new MessageResponse(1, "支付密码不正确！"));
-            }else if(flag==1){
+            //需要和bankcard模块调，似乎成功了
+            Optional<Bill> bill=billRepository.findByManifestId(billId);
+            if(bill.isPresent()){
+                Bill bil=bill.get();
+                if(bil.getStatus()!=0){
+                    return ResponseEntity.ok(new MessageResponse(1, "订单已支付或已取消！"));
+                }
+                if(bil.getPayWay()==1){
+                    return ResponseEntity.ok(new MessageResponse(1, "该订单为先到后付订单，请等待收货人支付！"));
+                }
+                double pay=bil.getPayment();
+                int cardId=restTemplate.getForObject("http://BANK-SERVICE:8002/api/bank-card/payOne/"+userId+"&&"+orders+"&&"+pay+"&&"+password,Integer.class);;
+                int manifestId=bil.getManifestId();
+                if(cardId==-1){
+                    return ResponseEntity.ok(new MessageResponse(1, "银行卡不存在！"));
+                }else if(cardId==-2){
+                    return ResponseEntity.ok(new MessageResponse(1, "密码不正确！"));
+                }else if(cardId== -5){
+                    ResponseEntity.ok(new MessageResponse(1, "支付失败,余额不足！"));
+                }
+                billRepository.updatePayStatus(bil.getManifestId(),cardId,1,new Date());
+                manifestRepository.updateIsPay(manifestId);
+                //支付后才进入定时模拟阶段
+                restTemplate.getForObject("http://TRANSPORT-SERVICE:8029/api/transport/update-valid-by-manifest-id/"+manifestId,Integer.class);
                 return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
-            }else if(flag==3){
-                return ResponseEntity.ok(new MessageResponse(1, "订单已支付或已取消！"));
-            }else if(flag==4){
-                return ResponseEntity.ok(new MessageResponse(1, "该订单为先到后付订单，请等待收货人支付！"));
-            }else if(flag==5) {
-                return ResponseEntity.ok(new MessageResponse(1, "余额不足，无法支付！"));
-            }else{
-                    return ResponseEntity.ok(new MessageResponse(1, "支付失败,账单不存在！"));
-            }
 
+            }
+            return ResponseEntity.ok(new MessageResponse(1, "支付失败,账单不存在！"));
 
         }catch(Exception e){
             return ResponseEntity.ok(new MessageResponse(1, "支付失败"));
@@ -139,7 +156,7 @@ public class BillController {
             }
 
         }catch(Exception e){
-            return ResponseEntity.ok(new MessageResponse(1, "获取订单aaa失败"));
+            return ResponseEntity.ok(new MessageResponse(1, "获取订单失败"));
         }
 
     }

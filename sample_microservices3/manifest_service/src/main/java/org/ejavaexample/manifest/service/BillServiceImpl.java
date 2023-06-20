@@ -83,32 +83,7 @@ public class BillServiceImpl {
 //    public int payOne(Long userId,int billId, int cardOrder, String password) {
 //        Optional<Bill>bill=billRepository.findByManifestId(billId);
 //        Optional<BankCard>bank=bankCardRepository.findByUserIdAndOrders(userId,cardOrder);
-//        if(bill.isPresent()&&bank.isPresent()){
-//            Bill bil=bill.get();
-//            BankCard card=bank.get();
-//            if(!card.getPassword().equals(password)){
-//                return 2;
-//            }
-//            if(bil.getStatus()!=0){
-//                return 3;
-//            }
-//            if(bil.getPayWay()==1){
-//                return 4;
-//            }
-//            double pay=bil.getPayment();
-//            int cardId=card.getId();
-//            int manifestId=bil.getManifestId();
-//            if(card.getAmount()<pay){
-//                return 5;
-//            }
-//            bankCardRepository.updateAmount(cardId,card.getAmount()-pay);
-//            billRepository.updatePayStatus(bil.getManifestId(),cardId,1,new Date());
-//            manifestRepository.updateIsPay(manifestId);
-//            //支付后才进入定时模拟阶段
-//            transportRepository.updateValidByManifestId(manifestId);
 //
-//            return 1;
-//        }
 //        return 0;
 //    }
 

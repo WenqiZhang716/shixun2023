@@ -3,6 +3,8 @@ package org.ejavaexample.manifest.service;
 
 import org.ejavaexample.manifest.entity.GoodType;
 import org.ejavaexample.manifest.entity.Manifest;
+import org.ejavaexample.manifest.entity.Bill;
+import org.ejavaexample.manifest.repository.BillRepository;
 import org.ejavaexample.manifest.repository.GoodTypeRepository;
 import org.ejavaexample.manifest.repository.ManifestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,8 @@ public class ManifestServiceImpl {
     @Autowired
     private GoodTypeRepository goodTypeRepository;
 
-//    @Autowired
-//    private BillRepository billRepository;
+    @Autowired
+    private BillRepository billRepository;
 
     public int createManifest(Long userId, int goodsType, double weight, int transportType,
                               String beginAddress, String endAddress, int payType, String receiverName,
@@ -57,7 +59,7 @@ public class ManifestServiceImpl {
             Manifest manifest=mani.get();
             if(manifest.getStatus()==0){
                 manifestRepository.cancelIt(manifestId);
-//                billRepository.updateStatusByManifestId(manifestId,2);
+               billRepository.updateStatusByManifestId(manifestId,2);
                return 1;
             }else{
                 return 0;
@@ -170,107 +172,107 @@ public class ManifestServiceImpl {
         return list2;
     }
 
-//    public Map<String, Object> getOneDetail(int id, Long userId) {
-//        Optional<Manifest> mani =manifestRepository.findById(id);
-//        Map<String, Object> mapAll = new HashMap<>();
-//        if(mani.isPresent()){
-//            Manifest manifest =mani.get();
-//            if(manifest.getUserId().equals(userId)){
-//                Map<String,Object> map=new HashMap<>();
-//                String transport="";
-//                if( manifest.getTransportType()==0){
-//                    transport="普通件";
-//                }else if( manifest.getTransportType()==1){
-//                    transport="快件";
-//                }else{
-//                    transport="超快件";
-//                }
-//                String zt="";
-//                String tag="";
-//                if(manifest.getStatus()==0){
-//                    zt="未收件";
-//                    tag="warning";
-//                }else if(manifest.getStatus()==1){
-//                    zt="进行中";
-//                    tag="primary";
-//                }else if(manifest.getStatus()==2){
-//                    zt="已完成";
-//                    tag="success";
-//                }else if(manifest.getStatus()==3){
-//                    zt="已取消";
-//                    tag="danger";
-//                }else if(manifest.getStatus()==4){
-//                    zt="待寄件";
-//                    tag="primary";
-//                }
-//                map.put("id", manifest.getId());
-//                map.put("userId", manifest.getUserId());
-//                GoodType good=goodTypeRepository.findById(manifest.getGoodTypeId());
-//                map.put("goodTypeId",  good.getName());
-//                map.put("weight", manifest.getWeight());
-//                map.put("transportType", transport);
-//                map.put("beginAddress", manifest.getBeginAddress());
-//                map.put("beginId", manifest.getBeginId());
-//                map.put("endAddress", manifest.getEndAddress());
-//                map.put("endId", manifest.getEndId());
-//                map.put("payType", manifest.getPayType()==0?"先付后到":"先到后付");
-//                map.put("amount", String.format("%.2f",manifest.getAmount()));
-//                map.put("receiverPhone", manifest.getReceiverPhone());
-//                map.put("receiverName", manifest.getReceiverName());
-//                map.put("beizhu", manifest.getBeizhu());
-//                map.put("status", zt);
-//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//                String format = simpleDateFormat.format(manifest.getCreateDate());
-//                map.put("createDate", format);
-//                map.put("isPay", manifest.getIsPay());
-//                map.put("tag",tag);
-//                mapAll.put("manifest",map);
-//                Optional<Bill> bill=billRepository.findByManifestId(id);
-//                Map<String,Object>map2=new HashMap<>();
-//                if(bill.isPresent()){
-//                    Bill b=bill.get();
-//                    String zt2="";
-//                    String tag2="";
-//                    if(b.getStatus()==0){
-//                        zt2="未支付";
-//                        tag2="warning";
-//                    }else if(b.getStatus()==1){
-//                        zt2="已支付";
-//                        tag2="success";
-//                    }else if(b.getStatus()==2){
-//                        zt2="已取消";
-//                        tag2="danger";
-//                    }else if(b.getStatus()==3){
-//                        zt2="您无需支付";
-//                        tag2="info";
-//                    }
-//                    map2.put("id", b.getId());
-//                    map2.put("manifestId", b.getManifestId());
-//                    map2.put( "payoff", b.getPayoff());
-//                    map2.put( "amount", String.format("%.2f",b.getAmount()));
-//                    map2.put( "payment", String.format("%.2f",b.getPayment()));
-//                    map2.put( "bankCardId", b.getBankCardId());
-//                    map2.put( "status", zt2);
-//                    map2.put( "payWay", b.getPayWay()==0?"先付后到":"先到后付");
-//                    map2.put( "payName", b.getPayName());
-//                    map2.put( "payPhone", b.getPayPhone());
-//                    map2.put( "userId",b.getUserId());
-//                    map2.put( "tag",tag2);
-//                    SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//                    if(b.getPayDate()!=null){
-//                        String format2 = simpleDateFormat2.format(b.getPayDate());
-//                        map.put( "date", format2);
-//                    }else{
-//                        String format2="";
-//                        map.put( "date", format2);
-//                    }
-//                }
-//                mapAll.put("bill",map2);
-//                return mapAll;
-//            }
-//        }
-//        return null;
-//    }
+    public Map<String, Object> getOneDetail(int id, Long userId) {
+        Optional<Manifest> mani =manifestRepository.findById(id);
+        Map<String, Object> mapAll = new HashMap<>();
+        if(mani.isPresent()){
+            Manifest manifest =mani.get();
+            if(manifest.getUserId().equals(userId)){
+                Map<String,Object> map=new HashMap<>();
+                String transport="";
+                if( manifest.getTransportType()==0){
+                    transport="普通件";
+                }else if( manifest.getTransportType()==1){
+                    transport="快件";
+                }else{
+                    transport="超快件";
+                }
+                String zt="";
+                String tag="";
+                if(manifest.getStatus()==0){
+                    zt="未收件";
+                    tag="warning";
+                }else if(manifest.getStatus()==1){
+                    zt="进行中";
+                    tag="primary";
+                }else if(manifest.getStatus()==2){
+                    zt="已完成";
+                    tag="success";
+                }else if(manifest.getStatus()==3){
+                    zt="已取消";
+                    tag="danger";
+                }else if(manifest.getStatus()==4){
+                    zt="待寄件";
+                    tag="primary";
+                }
+                map.put("id", manifest.getId());
+                map.put("userId", manifest.getUserId());
+                GoodType good=goodTypeRepository.findById(manifest.getGoodTypeId());
+                map.put("goodTypeId",  good.getName());
+                map.put("weight", manifest.getWeight());
+                map.put("transportType", transport);
+                map.put("beginAddress", manifest.getBeginAddress());
+                map.put("beginId", manifest.getBeginId());
+                map.put("endAddress", manifest.getEndAddress());
+                map.put("endId", manifest.getEndId());
+                map.put("payType", manifest.getPayType()==0?"先付后到":"先到后付");
+                map.put("amount", String.format("%.2f",manifest.getAmount()));
+                map.put("receiverPhone", manifest.getReceiverPhone());
+                map.put("receiverName", manifest.getReceiverName());
+                map.put("beizhu", manifest.getBeizhu());
+                map.put("status", zt);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String format = simpleDateFormat.format(manifest.getCreateDate());
+                map.put("createDate", format);
+                map.put("isPay", manifest.getIsPay());
+                map.put("tag",tag);
+                mapAll.put("manifest",map);
+                Optional<Bill> bill=billRepository.findByManifestId(id);
+                Map<String,Object>map2=new HashMap<>();
+                if(bill.isPresent()){
+                    Bill b=bill.get();
+                    String zt2="";
+                    String tag2="";
+                    if(b.getStatus()==0){
+                        zt2="未支付";
+                        tag2="warning";
+                    }else if(b.getStatus()==1){
+                        zt2="已支付";
+                        tag2="success";
+                    }else if(b.getStatus()==2){
+                        zt2="已取消";
+                        tag2="danger";
+                    }else if(b.getStatus()==3){
+                        zt2="您无需支付";
+                        tag2="info";
+                    }
+                    map2.put("id", b.getId());
+                    map2.put("manifestId", b.getManifestId());
+                    map2.put( "payoff", b.getPayoff());
+                    map2.put( "amount", String.format("%.2f",b.getAmount()));
+                    map2.put( "payment", String.format("%.2f",b.getPayment()));
+                    map2.put( "bankCardId", b.getBankCardId());
+                    map2.put( "status", zt2);
+                    map2.put( "payWay", b.getPayWay()==0?"先付后到":"先到后付");
+                    map2.put( "payName", b.getPayName());
+                    map2.put( "payPhone", b.getPayPhone());
+                    map2.put( "userId",b.getUserId());
+                    map2.put( "tag",tag2);
+                    SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    if(b.getPayDate()!=null){
+                        String format2 = simpleDateFormat2.format(b.getPayDate());
+                        map.put( "date", format2);
+                    }else{
+                        String format2="";
+                        map.put( "date", format2);
+                    }
+                }
+                mapAll.put("bill",map2);
+                return mapAll;
+            }
+        }
+        return null;
+    }
 
     public Map<String, Object> getHomeData(Long userId) {
         List<Manifest>list1=manifestRepository.findAllByUserId(userId);
