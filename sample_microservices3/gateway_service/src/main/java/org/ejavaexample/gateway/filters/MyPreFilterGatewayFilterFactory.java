@@ -11,24 +11,24 @@ public class MyPreFilterGatewayFilterFactory extends AbstractGatewayFilterFactor
 	public MyPreFilterGatewayFilterFactory() {
 		super(Config.class);
 	}
-	
+
 	@Override
 	public GatewayFilter apply(Config config) {
 		System.out.println("inside MyPreFilter.apply method");
-		
+
 		return (exchange, chain) -> {
 			ServerHttpRequest request = exchange.getRequest().mutate().header("a-test-pre-header", Math.random()*10+"").build();
 			return chain.filter(exchange.mutate().request(request).build());
 		};
 	}
-	
+
 	public static class Config {
 		private String name;
-		
+
 		public String getName() {
 			return this.name;
 		}
-		
+
 		public void setName(String name) {
 			this.name = name;
 		}

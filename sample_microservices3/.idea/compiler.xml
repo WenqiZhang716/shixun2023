@@ -8,34 +8,50 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="auth_service" />
+        <module name="translocation" />
+        <module name="tran_service" />
+        <module name="trann_service" />
         <module name="bank_service" />
-        <module name="transport_service" />
-        <module name="manifest_service" />
-        <module name="trans_service" />
+        <module name="transports_service" />
+        <module name="mani_service" />
         <module name="registry_service" />
+        <module name="transolation_service" />
         <module name="gateway_service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="aaa_service" target="17" />
       <module name="cart_service" target="17" />
       <module name="event_pipe" target="17" />
+      <module name="mani2_service" target="17" />
+      <module name="manifest_service" target="17" />
       <module name="product_service" target="17" />
       <module name="test_module" target="17" />
       <module name="test_service" target="17" />
+      <module name="tran_service" target="17" />
+      <module name="trans_service" target="17" />
+      <module name="translocation" target="1.5" />
+      <module name="transolation_service" target="1.8" />
+      <module name="transport_service" target="17" />
+      <module name="transports_service" target="17" />
       <module name="user_service" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="aaa_service" options="-parameters" />
       <module name="auth_service" options="-parameters" />
       <module name="bank_service" options="-parameters" />
       <module name="cart_service" options="-parameters" />
       <module name="event_pipe" options="-parameters" />
       <module name="gateway_service" options="-parameters" />
+      <module name="mani_service" options="-parameters" />
       <module name="manifest_service" options="-parameters" />
       <module name="product_service" options="-parameters" />
       <module name="registry_service" options="-parameters" />
       <module name="test_service" options="-parameters" />
+      <module name="tran_service" options="-parameters" />
+      <module name="trann_service" options="-parameters" />
       <module name="trans_service" options="-parameters" />
       <module name="transport_service" options="-parameters" />
       <module name="user_service" options="-parameters" />

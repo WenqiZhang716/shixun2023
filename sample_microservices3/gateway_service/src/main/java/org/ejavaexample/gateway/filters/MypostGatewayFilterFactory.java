@@ -10,15 +10,15 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class MypostGatewayFilterFactory extends AbstractGatewayFilterFactory<MypostGatewayFilterFactory.Config> {
-	
+
 	public MypostGatewayFilterFactory() {
 		super(Config.class);
 	}
-	
+
 	@Override
 	public GatewayFilter apply(Config config) {
 		System.out.println("inside MyPostFilter.apply method...");
-		
+
 		return(exchange, chain)->{
 			return chain.filter(exchange).then(Mono.fromRunnable(()->{
 				ServerHttpResponse response = exchange.getResponse();
@@ -31,19 +31,19 @@ public class MypostGatewayFilterFactory extends AbstractGatewayFilterFactory<Myp
                     response.getHeaders().set("clientId", "clientId-first-response");
                     return Mono.empty();
                 });
-				
-				
+
+
 			}));
 		};
 	}
-	
+
 	public static class Config {
 //		private String name;
-//		
+//
 //		public String getName() {
 //			return this.name;
 //		}
-//		
+//
 //		public void setName(String name) {
 //			this.name = name;
 //		}

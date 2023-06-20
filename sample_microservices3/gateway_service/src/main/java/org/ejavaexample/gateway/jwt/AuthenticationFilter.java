@@ -1,6 +1,6 @@
 package org.ejavaexample.gateway.jwt;
 
-import org.ejavaexample.gateway.filters.MyGlobalFilter;
+//import org.ejavaexample.gateway.filters.MyGlobalFilter;
 import org.ejavaexample.gateway.jwt.payload.request.ValidJwtRequest;
 import org.ejavaexample.gateway.jwt.payload.response.MessageResponse;
 import org.slf4j.Logger;
@@ -28,14 +28,14 @@ public class AuthenticationFilter implements GlobalFilter {
 
     //@Autowired
     //private MessageResponse rspmsg;
- 
+
     //@Autowired
     //private ValidJwtRequest rqtmsg;
-    
+
     @Autowired
 	private AuthFeignClient authJwt;
 
-    
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
@@ -47,9 +47,9 @@ public class AuthenticationFilter implements GlobalFilter {
             final String token = this.getAuthHeader(request).split(" ")[1];
             ValidJwtRequest rqtmsg=new ValidJwtRequest();
             MessageResponse rspmsg = new MessageResponse();
-            
-            rqtmsg.setJwt(token); 
-            
+
+            rqtmsg.setJwt(token);
+
 //            rspmsg=authJwt.IsJwtOk(rqtmsg);
 //            if (rspmsg.getMessage()!="True")
 //                return this.onError(exchange, "Authorization header is invalid", HttpStatus.UNAUTHORIZED);

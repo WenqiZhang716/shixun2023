@@ -13,12 +13,12 @@ spring:
 #          filters:
 #            - PrefixPath=/api
 
-        - id: MANIFEST-SERVICE
-          uri: lb://MANIFEST-SERVICE
-          predicates:
-            - Path=/mani/**
-          filters:
-            - PrefixPath=/api
+#        - id: MANIFEST-SERVICE
+#          uri: lb://MANIFEST-SERVICE
+#          predicates:
+#            - Path=/mani/**
+#          filters:
+#            - PrefixPath=/api
 
         - id: BANK-SERVICE
           uri: lb://BANK-SERVICE
@@ -27,10 +27,17 @@ spring:
           filters:
               - PrefixPath=/api
 
-        - id: TRANS-SERVICE
-          uri: lb://TRANS-SERVICE
+        - id: MANI-SERVICE
+          uri: lb://MANI-SERVICE
           predicates:
-            - Path=/trans/**
+            - Path=/mani/**
+          filters:
+            - PrefixPath=/api
+
+        - id: TRANN-SERVICE
+          uri: lb://TRANN-SERVICE
+          predicates:
+            - Path=/transport/**
           filters:
             - PrefixPath=/api
 
@@ -42,12 +49,12 @@ spring:
             - PrefixPath=/api
 
 
-        - id: TRANSPORT-SERVICE
-          uri: lb://TRANSPORT-SERVICE
-          predicates:
-            - Path=/transport/**
-          filters:
-            - PrefixPath=/api
+#        - id: TRANSPORT-SERVICE
+#          uri: lb://TRANSPORT-SERVICE
+#          predicates:
+#            - Path=/transport/**
+#          filters:
+#            - PrefixPath=/api
 
 
 

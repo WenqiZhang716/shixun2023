@@ -9,10 +9,18 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/aaa_service/pom.xml" />
         <option value="$PROJECT_DIR$/cart_service/pom.xml" />
         <option value="$PROJECT_DIR$/event_pipe/pom.xml" />
+        <option value="$PROJECT_DIR$/manifest_service/pom.xml" />
         <option value="$PROJECT_DIR$/product_service/pom.xml" />
         <option value="$PROJECT_DIR$/test_service/pom.xml" />
+        <option value="$PROJECT_DIR$/tran_service/pom.xml" />
+        <option value="$PROJECT_DIR$/trans_service/pom.xml" />
+        <option value="$PROJECT_DIR$/translocation/pom.xml" />
+        <option value="$PROJECT_DIR$/transolation_service/pom.xml" />
+        <option value="$PROJECT_DIR$/transport_service/pom.xml" />
+        <option value="$PROJECT_DIR$/transports_service/pom.xml" />
         <option value="$PROJECT_DIR$/user_service/pom.xml" />
       </set>
     </option>
