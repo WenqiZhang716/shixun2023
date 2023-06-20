@@ -58,7 +58,7 @@
                 }else if (this.user.oldPassword === this.user.password) {
                     this.$message.error("新密码不能与旧密码一样！")
                 }else{
-                    axios.post('/user/change-pw',{
+                    axios.post('/auth/change-pw',{
                         "password":this.user.oldPassword,
                         "new-password":this.user.password
                     })

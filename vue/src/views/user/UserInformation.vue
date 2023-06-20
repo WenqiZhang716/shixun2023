@@ -134,7 +134,7 @@
         },
         //数据的初始化
         created(){
-            axios.post('/user/get-info')
+            axios.post('/auth/get-info')
                 .then(res => {
                     console.log(res.data);
                     let datas=res.data.data;
@@ -164,7 +164,7 @@
         },
         methods: {
             reflushIt(){
-                axios.post('/user/get-info')
+                axios.post('/auth/get-info')
                     .then(res => {
                         console.log(res.data);
                         let datas=res.data.data;
@@ -213,7 +213,7 @@
                 }else{
                     sex2=2;
                 }
-                axios.post('/user/update-info',{
+                axios.post('/auth/update-info',{
                     nickName:nick,
                     realName:realName,
                     age:age,
@@ -240,7 +240,7 @@
 
             CheckOne(){
                 this.dialogFormVisible = false;
-                axios.post('/user/identify',{
+                axios.post('/auth/identify',{
                     realName:this.Checkform.realname,
                     id_number:this.Checkform.IdNumber
                 })

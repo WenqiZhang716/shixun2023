@@ -79,7 +79,7 @@
         },
         methods:{
             getData(){
-                axios.post('/mani/get-home-data')
+                axios.post('/mani/manifest-get-home-data')
                     .then(res => {
                         console.log(res.data);
                         if (res.data.code === 0) {

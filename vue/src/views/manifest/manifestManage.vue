@@ -324,7 +324,7 @@
                 this.$router.push('/transport/transport-plan');
             },
             payIt(){
-                axios.post('/bill/pay-bill', {
+                axios.post('/mani/bill-pay-bill', {
                     bill_id: this.payForm.bill_id,
                     card_order:this.payForm.card_order+1,
                     password:this.payForm.password
@@ -361,7 +361,7 @@
                     });
             },
             cancelOneManifest(){
-                axios.post('/mani/cancel',{
+                axios.post('/mani/manifest-cancel',{
                     id:this.chooseId
                 })
                     .then(res => {
@@ -410,7 +410,7 @@
             },
             showDetail(id){
                 const pageLoading = this.openLoading();
-                axios.post('/mani/get-one-detail',{
+                axios.post('/mani/manifest-get-one-detail',{
                     id:id
                 })
                     .then(res => {
@@ -443,7 +443,7 @@
             },
             findByType(){
                 const pageLoading = this.openLoading();
-                axios.post('/mani/find',{
+                axios.post('/mani/manifest-find',{
                     type:this.condition
                 })
                     .then(res => {
@@ -473,7 +473,7 @@
 
             },
             originIt(){
-                axios.post('/mani/find',{
+                axios.post('/mani/manifest-find',{
                     type:this.condition
                 })
                     .then(res => {

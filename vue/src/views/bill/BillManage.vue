@@ -187,7 +187,7 @@
             },
             findByType(){
                 const pageLoading = this.openLoading();
-                axios.post('/bill/get-list',{
+                axios.post('/mani-bill-get-list',{
                     type:this.condition
                 })
                     .then(res => {
@@ -228,7 +228,7 @@
         },
 
         mounted() {
-            axios.post('/bill/get-list',{
+            axios.post('/mani/bill-get-list',{
                 type:this.condition
             })
                 .then(res => {

@@ -301,7 +301,7 @@
                     console.error(error);
                 });
 
-            axios.post('/mani/get-good-type-list')
+            axios.post('/mani/manifest-get-good-type-list')
                 .then(res => {
                     console.log(res.data);
                     if (res.data.code===0){
@@ -373,7 +373,7 @@
                 this.dialogPayVisible=true;
             },
             reallyPayIt(){
-                axios.post('/bill/pay-bill', {
+                axios.post('/manifest-bill-pay-bill', {
                     bill_id: this.billForm.manifestId,
                     card_order:this.payForm.card_order+1,
                     password:this.payForm.password
@@ -419,7 +419,7 @@
                 this.$router.push("/manifest/manage");
             },
             submitCheck() {
-                axios.post('/user/userCheck')
+                axios.post('/auth/userCheck')
                     .then(res => {
                         console.log(res.data);
                         if (res.data.code === 0) {
@@ -458,7 +458,7 @@
 
             },
             createBill(id){
-                axios.post('/bill/create', {
+                axios.post('/mani/bill-create', {
                     manifest_id: id
                 })
                     .then(res => {
@@ -475,7 +475,7 @@
                     });
             },
             getBill(id){
-                axios.post('/bill/getOne', {
+                axios.post('/mani/bill-getOne', {
                     manifest_id:id
                 })
                     .then(res => {
@@ -523,7 +523,7 @@
                 this.needPay=true;
                this.dialogvisible = false;
                 let id = 0;
-                axios.post('/mani/create', this.ruleForm)
+                axios.post('/mani/manifest-create', this.ruleForm)
                     .then(res => {
                         console.log(res.data);
                         if (res.data.code === 0) {
