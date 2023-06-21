@@ -4,9 +4,9 @@ spring:
 
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/springcloud?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
-    username: root
-    password: 123456
+    url: jdbc:mysql://mysql.sqlpub.com:3306/fatelearning?useSSL=false&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: wenqi716
+    password: a5823b277c540073
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true

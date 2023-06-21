@@ -14,7 +14,7 @@ import java.util.Date;
 @Table(name = "transport")
 public class Transport {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private int manifestId;

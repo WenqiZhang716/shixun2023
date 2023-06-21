@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "transport_step")
 public class TransportStep {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "JDBC")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotBlank
     @Size(max = 200)

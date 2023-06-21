@@ -144,6 +144,16 @@ public class BankCardController {
 
     }
 
+    @GetMapping("/hasCard/{userId}")
+    public int HasCard(@PathVariable("userId") Long userId){
+        List<BankCard> bank=bankCardRepository.findAllByUserId(userId);
+        if(bank.isEmpty()){
+          return -1;
+        }else{
+            return 1;
+        }
+    }
+
 
 
 }

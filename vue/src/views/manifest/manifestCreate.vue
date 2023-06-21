@@ -373,7 +373,7 @@
                 this.dialogPayVisible=true;
             },
             reallyPayIt(){
-                axios.post('/manifest-bill-pay-bill', {
+                axios.post('/mani/bill-pay-bill', {
                     bill_id: this.billForm.manifestId,
                     card_order:this.payForm.card_order+1,
                     password:this.payForm.password
@@ -492,7 +492,7 @@
                                 this.billForm.payPhone=res.data.data.info.payPhone;
                                 this.billForm.status=res.data.data.info.payWay===0?'未支付':'请等对方支付';
                                 this.billForm.userId=res.data.data.info.userId;
-                                if(this.billForm.payWay===1){
+                                if(this.billForm.payWay==='先到后付'){
                                     this.needPay=false;
                                 }
                             setTimeout(()=>{

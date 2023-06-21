@@ -221,16 +221,16 @@ public class ManifestController {
         Long userId=restTemplate.getForObject("http://AUTH-SERVICE:8001/api/auth/getUserId/"+token,Long.class);
         String userName=restTemplate.getForObject("http://AUTH-SERVICE:8001/api/auth/getUserName/"+token,String.class);
         int manifestId= Integer.parseInt(params.get("manifest_id"));
-//        try{
+        try{
             int flag= billService.createOne(userId,userName,manifestId);
             if(flag==1){
                 return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
             }else{
                 return ResponseEntity.ok(new MessageResponse(1, "账单创建失败，货单不存在或已取消！"));
             }
-//        }catch(Exception e){
-//            return ResponseEntity.ok(new MessageResponse(1, "账单创建失败,请勿重复创建！"));
-//        }
+        }catch(Exception e){
+            return ResponseEntity.ok(new MessageResponse(1, "账单创建失败,请勿重复创建！"));
+        }
 
     }
 
@@ -262,7 +262,7 @@ public class ManifestController {
         int orders = Integer.parseInt(params.get("card_order"));
         String password=params.get("password");
 
-        try{
+//        try{
             //需要和bankcard模块调，似乎成功了
             Optional<Bill> bill=billRepository.findByManifestId(billId);
             if(bill.isPresent()){
@@ -286,15 +286,15 @@ public class ManifestController {
                 billRepository.updatePayStatus(bil.getManifestId(),cardId,1,new Date());
                 manifestRepository.updateIsPay(manifestId);
                 //支付后才进入定时模拟阶段
-                restTemplate.getForObject("http://TRANSPORT-SERVICE:8029/api/transport/update-valid-by-manifest-id/"+manifestId,Integer.class);
+                restTemplate.getForObject("http://TRANN-SERVICE:8029/api/transport/update-valid-by-manifest-id/"+manifestId,Integer.class);
                 return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
 
             }
             return ResponseEntity.ok(new MessageResponse(1, "支付失败,账单不存在！"));
 
-        }catch(Exception e){
-            return ResponseEntity.ok(new MessageResponse(1, "支付失败"));
-        }
+//        }catch(Exception e){
+//            return ResponseEntity.ok(new MessageResponse(1, "支付失败"));
+//        }
 
     }
 

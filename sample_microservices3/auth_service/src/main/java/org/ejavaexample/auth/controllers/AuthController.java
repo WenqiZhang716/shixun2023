@@ -28,6 +28,7 @@ import org.ejavaexample.auth.repository.RoleRepository;
 //import org.ejavaexample.auth.repository.UsrRepository;
 import org.ejavaexample.auth.service.impl.UserServiceImpl;
 import org.ejavaexample.auth.jwt.JwtUtils;
+import org.springframework.web.client.RestTemplate;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -46,6 +47,9 @@ public class AuthController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
 
   @PostMapping("/login")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -57,30 +61,30 @@ public class AuthController {
 		    List<String> roles = user.getRoles().stream()
 		            .map(item -> item.getName().toString())
 		            .collect(Collectors.toList());
-	
-		    return ResponseEntity.ok(new JwtResponse(jwt, 
-	                user.getId(), 
-	                user.getUsername(),
-	                roles));	
+
+
+            return ResponseEntity.ok(new DataResponse(0,new JwtResponse(jwt,
+                    user.getId(),
+                    user.getUsername(),
+                    roles)));
 		}
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse(1,"Error: 用户不存在!"));
+		return ResponseEntity.ok(new MessageResponse(1,"Error: 用户不存在!"));
 
 	}
 	catch(Exception e){
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse(1,"Error: !"));
+		return ResponseEntity.ok(new MessageResponse(1,"密码不正确"));
 	}
 	
   }
 
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+
       if(!signUpRequest.getUsername().matches("[1][34578][0-9]{9}")){
           return ResponseEntity.ok(new MessageResponse(1,"错误: 请输入正确手机号!"));
       }
     if (userService.userExist(signUpRequest.getUsername())) {
-      return ResponseEntity
-          .badRequest()
-          .body(new MessageResponse(1,"手机号已注册!"));
+      return ResponseEntity.ok(new MessageResponse(1,"手机号已注册!"));
     }
     // Create new user's account
 	encoder = new BCryptPasswordEncoder();
@@ -215,6 +219,35 @@ public class AuthController {
         }
         return 2;
     }
+
+    @PostMapping("/userCheck")
+    @PreAuthorize("hasRole('USER') ")
+    public ResponseEntity<?>userCheck(@RequestHeader("Authorization") String tokenBearer){
+        String token;
+        if(tokenBearer.startsWith("Bearer")){
+            token=tokenBearer.substring(7, tokenBearer.length());
+        }else{
+            token=tokenBearer;
+        }
+        String username=jwtUtils.getUserNameFromJwtToken(token);
+        Long userId=jwtUtils.getUserIdByJwtToken(token);
+        Optional<User> user=userRepository.findByUsername(username);
+        if(user.isPresent()){
+           if(user.get().getIsCheck()==0){
+               return ResponseEntity.ok(new MessageResponse(1, "请先进行实名认证!"));
+           }
+            int cardId=restTemplate.getForObject("http://BANK-SERVICE:8002/api/bank-card/hasCard/"+userId,Integer.class);
+           if(cardId==-1){
+               return ResponseEntity.ok(new MessageResponse(1, "请至少绑定一张银行卡!"));
+           }
+
+        }else {
+            return ResponseEntity.ok(new MessageResponse(1, "用户不存在!"));
+        }
+        return ResponseEntity.ok(new DataResponse(0,new HashMap<String,Object>()));
+
+    }
+
 
 
 
