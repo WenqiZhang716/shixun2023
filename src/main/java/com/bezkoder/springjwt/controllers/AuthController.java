@@ -109,7 +109,7 @@ public class AuthController {
 
 		//Set<String> strRoles = signUpRequest.getRoll();
 		Set<Role> roles = new HashSet<>();
-		//只有用户可以注册，运货员由公司发放账号
+		//只有用户可以注册
 		int oneRole=-1;
 		if (oneRole == -1) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
