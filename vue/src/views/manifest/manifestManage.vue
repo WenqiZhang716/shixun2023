@@ -138,7 +138,7 @@
             <div>
                 <el-form :model="detailForm" :rules="rules" ref="ruleForm" label-width="100px" class="descriptionStyle" >
                     <el-form-item prop="manifest">
-                        <el-descriptions  title="对应账单" column="2" :model="detailForm.manifest" border>
+                        <el-descriptions  title="对应货单" column="2" :model="detailForm.manifest" border>
 
                             <el-descriptions-item label="货单号"><span>{{detailForm.manifest.id}}</span></el-descriptions-item>
                             <el-descriptions-item label="物品种类"><span>{{detailForm.manifest.goodTypeId}}</span></el-descriptions-item>

@@ -20,7 +20,7 @@
                 <el-submenu index="2">
                     <template slot="title" >
                         <i class="el-icon-s-tools"></i>
-                        <span class="fontSize">用户模块</span>
+                        <span class="fontSize">用户管理</span>
                     </template>
                     <el-menu-item-group >
                         <el-menu-item index="/user/user-info">个人信息</el-menu-item>
